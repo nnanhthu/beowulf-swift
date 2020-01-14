@@ -17,10 +17,10 @@ class TransactionTest: XCTestCase {
         XCTAssertEqual(tx.expiration, Date(timeIntervalSince1970: 0))
         XCTAssertEqual(tx.extensions.count, 0)
         XCTAssertEqual(tx.operations.count, 2)
-        let vote = tx.operations.first as? Beowulf.Operation.Vote
+//        let vote = tx.operations.first as? Beowulf.Operation.Vote
         let transfer = tx.operations.last as? Beowulf.Operation.Transfer
-        XCTAssertEqual(vote, Beowulf.Operation.Vote(voter: "foo", author: "bar", permlink: "baz", weight: 1000))
-        XCTAssertEqual(transfer, Beowulf.Operation.Transfer(from: "foo", to: "bar", amount: Asset(10, .beowulf), memo: "baz"))
+//        XCTAssertEqual(vote, Beowulf.Operation.Vote(voter: "foo", author: "bar", permlink: "baz", weight: 1000))
+        XCTAssertEqual(transfer, Beowulf.Operation.Transfer(from: "foo", to: "bar", amount: Asset(10, .beowulf), fee: Asset(10, .wd), memo: "baz"))
     }
 
     func testSigning() throws {
@@ -28,11 +28,11 @@ class TransactionTest: XCTestCase {
             return XCTFail("Unable to parse private key")
         }
         let operations: [OperationType] = [
-            Operation.Vote(voter: "foo", author: "foo", permlink: "baz", weight: 1000),
-            Operation.Transfer(from: "foo", to: "bar", amount: Asset(10, .beowulf), memo: "baz"),
+//            Operation.Vote(voter: "foo", author: "foo", permlink: "baz", weight: 1000),
+            Operation.Transfer(from: "foo", to: "bar", amount: Asset(10, .beowulf), fee: Asset(10, .wd), memo: "baz"),
         ]
         let expiration = Date(timeIntervalSince1970: 0)
-        let transaction = Transaction(refBlockNum: 0, refBlockPrefix: 0, expiration: expiration, operations: operations)
+        let transaction = Transaction(refBlockNum: 0, refBlockPrefix: 0, expiration: expiration, createdTime: 0, operations: operations)
         AssertEncodes(transaction, Data("00000000000000000000020003666f6f03666f6f0362617ae8030203666f6f03626172102700000000000003535445454d00000362617a00"))
         XCTAssertEqual(try transaction.digest(forChain: .mainNet), Data("44424a1259aba312780ca6957a91dbd8a8eef8c2c448d89eccee34a425c77512"))
         let customChain = Data("79276aea5d4877d9a25892eaa01b0adf019d3e5cb12a97478df3298ccdd01673")

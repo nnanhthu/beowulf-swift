@@ -139,7 +139,7 @@ public struct Operation {
         public var votes: Int64
         public var fee: Asset
 
-        public init(account: String, supernode: String, approve: Bool) {
+        public init(account: String, supernode: String, approve: Bool, votes: Int64, fee: Asset) {
             self.account = account
             self.supernode = supernode
             self.approve = approve

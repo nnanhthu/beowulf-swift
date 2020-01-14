@@ -28,13 +28,13 @@ public struct API {
         public let headBlockNumber: UInt32
         public let headBlockId: BlockId
         public let time: Date
-        public let currentSupernode: string
+        public let currentSupernode: String
         public let currentSupply: Asset
         public let currentWdSupply: Asset
         public let totalVestingFund: Asset
         public let totalVestingShares: Asset
         public let currentAslot: UInt64
-        public let recentSlotsFilled: BigInt
+        public let recentSlotsFilled: Int64
         public let participationCount: UInt8
         public let lastIrreversibleBlockNum: UInt32
     }

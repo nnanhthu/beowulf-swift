@@ -14,13 +14,13 @@ class PerformanceTest: XCTestCase {
     }
 
     func testEncode() {
-        let vote = Operation.Vote(voter: "foo", author: "bar", permlink: "baz")
-        let comment = Operation.Comment(title: "foo", body: "bar", author: "baz", permlink: "qux")
-        let txn = Transaction(refBlockNum: 0, refBlockPrefix: 0, expiration: Date(), operations: [vote, comment])
-        self.measure {
-            for _ in 0 ... 1000 {
-                _ = try! BeowulfEncoder.encode(txn)
-            }
-        }
+//        let vote = Operation.Vote(voter: "foo", author: "bar", permlink: "baz")
+//        let comment = Operation.Comment(title: "foo", body: "bar", author: "baz", permlink: "qux")
+//        let txn = Transaction(refBlockNum: 0, refBlockPrefix: 0, expiration: Date(), operations: [vote, comment])
+//        self.measure {
+//            for _ in 0 ... 1000 {
+//                _ = try! BeowulfEncoder.encode(txn)
+//            }
+//        }
     }
 }

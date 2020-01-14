@@ -10,7 +10,7 @@ class AssetTest: XCTestCase {
         AssertEncodes(Asset(10, .beowulf), "10.000 BWF")
         AssertEncodes(Asset(123_456.789, .vests), "123456.789000 M")
         AssertEncodes(Asset(42, .custom(name: "TOWELS", precision: 0)), "42 TOWELS")
-        AssertEncodes(Asset(0.001, .sbd), "0.001 SBD")
+        AssertEncodes(Asset(0.001, .wd), "0.001 SBD")
     }
 
     func testDecodable() throws {

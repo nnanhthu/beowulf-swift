@@ -68,12 +68,12 @@ extension Secp256k1Test {
     ]
 }
 
-extension SeemURLTest {
-    static let __allTests = [
-        ("testEncodeDecode", testEncodeDecode),
-        ("testParams", testParams),
-    ]
-}
+//extension SeemURLTest {
+//    static let __allTests = [
+//        ("testEncodeDecode", testEncodeDecode),
+//        ("testParams", testParams),
+//    ]
+//}
 
 extension Sha2Test {
     static let __allTests = [

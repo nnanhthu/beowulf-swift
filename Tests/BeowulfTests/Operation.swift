@@ -1,19 +1,9 @@
 @testable import Beowulf
 import XCTest
 
-fileprivate let vote = (
-    Operation.Vote(voter: "foo", author: "bar", permlink: "baz", weight: 1000),
-    "{\"voter\":\"foo\",\"author\":\"bar\",\"permlink\":\"baz\",\"weight\":1000}"
-)
-
 fileprivate let transfer = (
-    Operation.Transfer(from: "foo", to: "bar", amount: Asset(10, .beowulf), memo: "baz"),
+    Operation.Transfer(from: "foo", to: "bar", amount: Asset(10, .beowulf), fee: Asset(10, .wd), memo: "baz"),
     "{\"from\":\"foo\",\"to\":\"bar\",\"amount\":\"10.000 BWF\",\"memo\":\"baz\"}"
-)
-
-fileprivate let commentOptions = (
-    Operation.CommentOptions(author: "foo", permlink: "bar", maxAcceptedPayout: Asset(10, .sbd), percentBeowulfDollars: 41840, allowVotes: true, allowCurationRewards: true, extensions: [.commentPayoutBeneficiaries([Operation.CommentOptions.BeneficiaryRoute(account: "baz", weight: 5000)])]),
-    "{\"author\":\"foo\",\"permlink\":\"bar\",\"max_accepted_payout\":\"10.000 SBD\",\"percent_beowulf_dollars\":41840,\"allow_votes\":true,\"allow_curation_rewards\":true,\"extensions\":[[0,{\"beneficiaries\":[{\"account\":\"baz\",\"weight\":5000}]}]]}"
 )
 
 let account_create = (
@@ -22,9 +12,7 @@ let account_create = (
         creator: "beowulf",
         newAccountName: "paulsphotography",
         owner: Authority(weightThreshold: 1, accountAuths: [], keyAuths: [[PublicKey("STM8LMF1uA5GAPfsAe1dieBRATQfhgi1ZqXYRFkaj1WaaWx9vVjau")!: 1]]),
-        active: Authority(weightThreshold: 1, accountAuths: [], keyAuths: [[PublicKey("STM56WPHZKvxoHpjQh69XakuoE5czuewrTDYeUBsQNKjnq3a6bbh6")!: 1]]),
-        posting: Authority(weightThreshold: 1, accountAuths: [], keyAuths: [[PublicKey("STM5oPsxWgfCH2FWqcXBWeeMmZoyBY5baiuV1vQWMxVVpYxEsJ6Hx")!: 1]]),
-        memoKey: PublicKey("STM7SSqMsrCqNZ3NdJLwWqC2u5PQ66JB2uCCs6ee5NFFqXxxB46AH")!,
+        
         jsonMetadata: ""
     ),
     "{\"fee\":\"10.000 BWF\",\"creator\":\"beowulf\",\"new_account_name\":\"paulsphotography\",\"owner\":{\"weight_threshold\":1,\"account_auths\":[],\"key_auths\":[[\"STM8LMF1uA5GAPfsAe1dieBRATQfhgi1ZqXYRFkaj1WaaWx9vVjau\",1]]},\"active\":{\"weight_threshold\":1,\"account_auths\":[],\"key_auths\":[[\"STM56WPHZKvxoHpjQh69XakuoE5czuewrTDYeUBsQNKjnq3a6bbh6\",1]]},\"posting\":{\"weight_threshold\":1,\"account_auths\":[],\"key_auths\":[[\"STM5oPsxWgfCH2FWqcXBWeeMmZoyBY5baiuV1vQWMxVVpYxEsJ6Hx\",1]]},\"memo_key\":\"STM7SSqMsrCqNZ3NdJLwWqC2u5PQ66JB2uCCs6ee5NFFqXxxB46AH\",\"json_metadata\":\"\"}",
@@ -33,19 +21,16 @@ let account_create = (
 
 class OperationTest: XCTestCase {
     func testEncodable() throws {
-        AssertEncodes(vote.0, Data("03666f6f036261720362617ae803"))
-        AssertEncodes(vote.0, ["voter": "foo", "author": "bar", "permlink": "baz"])
-        AssertEncodes(vote.0, ["weight": 1000])
+        
         AssertEncodes(transfer.0, Data("03666f6f03626172102700000000000003535445454d00000362617a"))
         AssertEncodes(transfer.0, ["from": "foo", "to": "bar", "amount": "10.000 BWF", "memo": "baz"])
-        AssertEncodes(commentOptions.0, Data("03666f6f036261721027000000000000035342440000000070a301010100010362617a8813"))
+        
         AssertEncodes(account_create.0, account_create.2)
     }
 
     func testDecodable() {
-        AssertDecodes(json: vote.1, vote.0)
+        
         AssertDecodes(json: transfer.1, transfer.0)
-        AssertDecodes(json: commentOptions.1, commentOptions.0)
         AssertDecodes(json: account_create.1, account_create.0)
     }
 }

@@ -88,15 +88,15 @@ extension PublicKey.AddressPrefix: ExpressibleByStringLiteral, LosslessStringCon
     public typealias StringLiteralType = String
 
     /// Create new addres prefix from string.
-    //public init(_ value: String) {
-    //    if value == "BEO" {
-    //        self = .mainNet
-    //    } else if value == "TST" {
-    //        self = .testNet
-    //    } else {
-    //        self = .custom(value)
-    //    }
-    //}
+    public init(_ value: String) {
+        if value == "BEO" {
+            self = .mainNet
+        } else if value == "TST" {
+            self = .testNet
+        } else {
+            self = .custom(value)
+        }
+    }
 
     public init(stringLiteral value: String) {
         self.init(value)
@@ -108,7 +108,7 @@ extension PublicKey.AddressPrefix: ExpressibleByStringLiteral, LosslessStringCon
         case .mainNet:
             return "BEO"
         case .testNet:
-            return "BEO"
+            return "TST"
         case let .custom(prefix):
             return prefix.uppercased()
         }

@@ -118,7 +118,7 @@ public struct SignedTransaction: _Transaction, Equatable {
         return self.transaction.operations
     }
 
-    public var createdTime: Date {
+    public var createdTime: UInt64 {
             return self.transaction.createdTime
     }
 
