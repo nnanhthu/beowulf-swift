@@ -3,10 +3,10 @@ import XCTest
 
 class PublicKeyTest: XCTestCase {
     func testKey() {
-        if let key = PublicKey("STM6672Ei8X4yMfDmEhBD66xfpG177qrbuic8KpUe1GVV9GVGovcv") {
-            XCTAssertEqual(String(key), "STM6672Ei8X4yMfDmEhBD66xfpG177qrbuic8KpUe1GVV9GVGovcv")
+        if let key = PublicKey("BEO6672Ei8X4yMfDmEhBD66xfpG177qrbuic8KpUe1GVV9GVGovcv") {
+            XCTAssertEqual(String(key), "BEO6672Ei8X4yMfDmEhBD66xfpG177qrbuic8KpUe1GVV9GVGovcv")
             XCTAssertEqual(key.prefix, .mainNet)
-            XCTAssertEqual(key.prefix, "STM")
+            XCTAssertEqual(key.prefix, "BEO")
         } else {
             XCTFail("Unable to decode key")
         }

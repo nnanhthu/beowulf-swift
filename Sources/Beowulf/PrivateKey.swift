@@ -57,7 +57,7 @@ public struct PrivateKey: Equatable {
     }
 
     /// Derive the public key for this private key.
-    /// - Parameter prefix: Address prefix to use when creating key, defaults to main net (STM).
+    /// - Parameter prefix: Address prefix to use when creating key, defaults to main net (BEO).
     public func createPublic(prefix: PublicKey.AddressPrefix = .mainNet) -> PublicKey {
         let result = try! Secp256k1Context.shared.createPublic(fromSecret: self.secret)
         return PublicKey(key: result, prefix: prefix)!

@@ -24,7 +24,14 @@ public struct API {
     }
 
     public struct DynamicGlobalProperties: Decodable {
-       	public let id: Data
+               
+        public let jsonrpc: String
+        public let result: DynamicGlobalProperties2
+        public let id: Int
+        }
+    
+    public struct DynamicGlobalProperties2: Decodable {
+//       	public let id: Data
         public let headBlockNumber: UInt32
         public let headBlockId: BlockId
         public let time: Date
@@ -41,8 +48,16 @@ public struct API {
 
     public struct GetDynamicGlobalProperties: Request {
         public typealias Response = DynamicGlobalProperties
-        public let method = "get_dynamic_global_properties"
-        public init() {}
+        public let method = "condenser_api.get_dynamic_global_properties"
+        public let params: RequestParams<String>?
+        public init() {self.params = RequestParams([])}
+        
+//        public typealias Response = DynamicGlobalProperties
+//        public let method = "condenser_api.get_dynamic_global_properties"
+//        public let params: RequestParams<Int>?
+//        public init() {
+//            self.params = RequestParams([])
+//        }
     }
 
     public struct TransactionConfirmation: Decodable {

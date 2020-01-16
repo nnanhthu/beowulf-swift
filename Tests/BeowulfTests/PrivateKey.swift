@@ -34,7 +34,7 @@ class PrivateKeyTest: XCTestCase {
 
     func testCreatePublic() {
         if let key = PrivateKey("5HsQCyqCw61VPQ9tN4ttasHW3AH6cJ6tJdneAXR8gUJ2MWyxxpA") {
-            XCTAssertEqual(key.createPublic(), PublicKey("STM6BohVaUq55WgAD38pYVMZE4oxmoX7hAgxsni5EdNdgaKJ8FQDR"))
+            XCTAssertEqual(key.createPublic(), PublicKey("BEO6BohVaUq55WgAD38pYVMZE4oxmoX7hAgxsni5EdNdgaKJ8FQDR"))
             XCTAssertEqual(key.createPublic(prefix: .testNet), PublicKey("TST6BohVaUq55WgAD38pYVMZE4oxmoX7hAgxsni5EdNdgaKJ8FQDR"))
             XCTAssertEqual(key.createPublic(prefix: "FOO"), PublicKey("FOO6BohVaUq55WgAD38pYVMZE4oxmoX7hAgxsni5EdNdgaKJ8FQDR"))
         } else {

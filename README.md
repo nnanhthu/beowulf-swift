@@ -13,7 +13,7 @@ In your Package.swift add:
 
 ```
 dependencies: [
-    .package(url: "https://github.com/steemit/swift-steem.git", .branch("master"))
+    .package(url: "https://github.com/nnanhthu/beowulf-swift", .branch("master"))
 ]
 ```
 

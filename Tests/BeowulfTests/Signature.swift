@@ -18,6 +18,6 @@ class SignatureTest: XCTestCase {
     }
 
     func testRecover() {
-        XCTAssertEqual(sig.recover(message: Data(count: 32)), PublicKey("STM6BohVaUq55WgAD38pYVMZE4oxmoX7hAgxsni5EdNdgaKJ8FQDR"))
+        XCTAssertEqual(sig.recover(message: Data(count: 32)), PublicKey("BEO6BohVaUq55WgAD38pYVMZE4oxmoX7hAgxsni5EdNdgaKJ8FQDR"))
     }
 }
