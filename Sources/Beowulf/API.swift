@@ -41,7 +41,7 @@ public struct API {
         public let totalVestingFund: Asset
         public let totalVestingShares: Asset
         public let currentAslot: UInt64
-        public let recentSlotsFilled: Int64
+        public let recentSlotsFilled: BInt
         public let participationCount: UInt8
         public let lastIrreversibleBlockNum: UInt32
     }
@@ -141,5 +141,12 @@ public struct API {
         public init(names: [String]) {
             self.params = RequestParams([names])
         }
+    }
+    
+}
+
+extension BInt: Decodable {
+    public init(from decoder: Decoder) throws {
+        // Initialization goes here
     }
 }
