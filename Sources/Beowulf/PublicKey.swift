@@ -45,7 +45,7 @@ public struct PublicKey: Equatable {
         guard let keyData = Data(base58CheckEncoded: String(key), options: .grapheneChecksum) else {
             return nil
         }
-        self.prefix = AddressPrefix(String(prefix))
+        self.prefix = AddressPrefix.mainNet //AddressPrefix(String(prefix))
         self.key = keyData
     }
 
@@ -91,9 +91,11 @@ extension PublicKey.AddressPrefix: ExpressibleByStringLiteral, LosslessStringCon
     public init(_ value: String) {
         if value == "BEO" {
             self = .mainNet
-        } else if value == "TST" {
-            self = .testNet
-        } else {
+        }
+//        else if value == "TST" {
+//            self = .testNet
+//        }
+        else {
             self = .custom(value)
         }
     }
@@ -108,7 +110,7 @@ extension PublicKey.AddressPrefix: ExpressibleByStringLiteral, LosslessStringCon
         case .mainNet:
             return "BEO"
         case .testNet:
-            return "TST"
+            return "BEO"
         case let .custom(prefix):
             return prefix.uppercased()
         }

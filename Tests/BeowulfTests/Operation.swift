@@ -2,7 +2,7 @@
 import XCTest
 
 fileprivate let transfer = (
-    Operation.Transfer(from: "foo", to: "bar", amount: Asset(10, .beowulf), fee: Asset(10, .wd), memo: "baz"),
+    Operation.Transfer(from: "foo", to: "bar", amount: Asset(10, Symbol(5,"BWF")), fee: Asset(10, Symbol(5,"W")), memo: "baz"),
     "{\"from\":\"foo\",\"to\":\"bar\",\"amount\":\"10.00000 BWF\",\"fee\":\"10.00000 W\",\"memo\":\"baz\"}"
 )
 

@@ -127,7 +127,100 @@ public struct SignedTransaction: _Transaction, Equatable {
     }
 }
 
+/// A signed transaction.
+public struct TransactionResponse: _Transaction {
+    public var refBlockNum: UInt16
+    public var refBlockPrefix: UInt32
+    public var expiration: Date
+    public var extensions: [String]
+    public var operations: [OperationType] {
+        return self._operations.map { $0.operation }
+    }
+    public var signatures: [String]
+    public var createdTime: UInt64
+    public var transactionId: String
+    public var blockNum: UInt32
+    public var transactionNum: UInt32
+    public var status: String
+
+    internal var _operations: [AnyOperation]
+
+    /// Create a new transaction.
+//public init(refBlockNum: UInt16, refBlockPrefix: UInt32, expiration: Date, createdTime: UInt64, operations: [OperationType] = [], extensions: [String] = []) {
+//        self.refBlockNum = refBlockNum
+//        self.refBlockPrefix = refBlockPrefix
+//        self.expiration = expiration
+//        self._operations = operations.map { AnyOperation($0) }
+//        self.extensions = extensions
+//        self.createdTime = createdTime
+//    }
+
+    /// Append an operation to the transaction.
+    public mutating func append(operation: OperationType) {
+        self._operations.append(AnyOperation(operation))
+    }
+
+    /// SHA2-256 digest for signing.
+    public func digest(forChain chain: ChainId = .mainNet) throws -> Data {
+        var data = chain.data
+        data.append(try BeowulfEncoder.encode(self))
+        return data.sha256Digest()
+    }
+}
+
+extension TransactionResponse: Equatable {
+    public static func == (lhs: TransactionResponse, rhs: TransactionResponse) -> Bool {
+        return (try? lhs.digest()) == (try? rhs.digest())
+    }
+}
+
 // Codable conformance.
+extension TransactionResponse {
+    fileprivate enum Key: CodingKey {
+        case refBlockNum
+        case refBlockPrefix
+        case expiration
+        case operations
+        case extensions
+        case createdTime
+        case transactionId
+        case blockNum
+        case transactionNum
+        case status
+        case signatures
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: Key.self)
+        self.refBlockNum = try container.decode(UInt16.self, forKey: .refBlockNum)
+        self.refBlockPrefix = try container.decode(UInt32.self, forKey: .refBlockPrefix)
+        self.expiration = try container.decode(Date.self, forKey: .expiration)
+        self._operations = try container.decode([AnyOperation].self, forKey: .operations)
+        self.extensions = try container.decode([String].self, forKey: .extensions)
+        self.createdTime = try container.decode(UInt64.self, forKey: .createdTime)
+        self.signatures = try container.decode([String].self, forKey: .signatures)
+        self.transactionId = try container.decode(String.self, forKey: .transactionId)
+        self.blockNum = try container.decode(UInt32.self, forKey: .blockNum)
+        self.transactionNum = try container.decode(UInt32.self, forKey: .transactionNum)
+        self.status = try container.decode(String.self, forKey: .status)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: Key.self)
+        try container.encode(self.refBlockNum, forKey: .refBlockNum)
+        try container.encode(self.refBlockPrefix, forKey: .refBlockPrefix)
+        try container.encode(self.expiration, forKey: .expiration)
+        try container.encode(self._operations, forKey: .operations)
+        try container.encode(self.extensions, forKey: .extensions)
+        try container.encode(self.createdTime, forKey: .createdTime)
+        try container.encode(self.signatures, forKey: .signatures)
+        try container.encode(self.transactionId, forKey: .transactionId)
+        try container.encode(self.blockNum, forKey: .blockNum)
+        try container.encode(self.transactionNum, forKey: .transactionNum)
+        try container.encode(self.status, forKey: .status)
+    }
+}
+
 extension Transaction {
     fileprivate enum Key: CodingKey {
         case refBlockNum

@@ -116,8 +116,9 @@ internal struct ResponseError: Decodable {
 
 /// JSON-RPC 2.0 response payload wrapper.
 internal struct ResponsePayload<T: Request>: Decodable {
-    let id: Int?
+//    let jsonrpc: String
     let result: T.Response?
+    let id: Int?
     let error: ResponseError?
 }
 
@@ -224,7 +225,9 @@ public class Client {
         let decoder = Client.JSONDecoder()
         let responsePayload: ResponsePayload<T>
         do {
+            print(data as NSData)
             responsePayload = try decoder.decode(ResponsePayload<T>.self, from: data)
+            print("response payload:\(responsePayload)")
         } catch {
             throw Error.codingError(message: "Unable to decode response", error: error)
         }
@@ -234,6 +237,7 @@ public class Client {
         if responsePayload.id != payload.id {
             throw Error.networkError(message: "Request id mismatch", error: nil)
         }
+        print("response payload result:\(responsePayload.result)")
         return responsePayload.result
     }
 

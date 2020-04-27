@@ -53,7 +53,7 @@ public struct PrivateKey: Equatable {
             }
             result = try Secp256k1Context.shared.sign(message: message, secretKey: self.secret, ndata: ndata)
         } while (!isCanonicalSignature(result.0))
-        return Signature(signature: result.0, recoveryId: UInt8(result.1))
+        return Signature(signature: result.0, recoveryId: Int32(result.1))
     }
 
     /// Derive the public key for this private key.

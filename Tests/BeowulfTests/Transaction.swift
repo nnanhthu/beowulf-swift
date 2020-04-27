@@ -20,7 +20,7 @@ class TransactionTest: XCTestCase {
 //        let vote = tx.operations.first as? Beowulf.Operation.Vote
         let transfer = tx.operations.last as? Beowulf.Operation.Transfer
 //        XCTAssertEqual(vote, Beowulf.Operation.Vote(voter: "foo", author: "bar", permlink: "baz", weight: 1000))
-        XCTAssertEqual(transfer, Beowulf.Operation.Transfer(from: "foo", to: "bar", amount: Asset(10, .beowulf), fee: Asset(10, .wd), memo: "baz"))
+        XCTAssertEqual(transfer, Beowulf.Operation.Transfer(from: "foo", to: "bar", amount: Asset(10, Symbol(5,"BWF")), fee: Asset(10, Symbol(5,"W")), memo: "baz"))
     }
 
     func testSigning() throws {
@@ -29,7 +29,7 @@ class TransactionTest: XCTestCase {
         }
         let operations: [OperationType] = [
 //            Operation.Vote(voter: "foo", author: "foo", permlink: "baz", weight: 1000),
-            Operation.Transfer(from: "foo", to: "bar", amount: Asset(10, .beowulf), fee: Asset(10, .wd), memo: "baz"),
+            Operation.Transfer(from: "foo", to: "bar", amount: Asset(10, Symbol(5,"BWF")), fee: Asset(10, Symbol(5,"W")), memo: "baz"),
         ]
         let expiration = Date(timeIntervalSince1970: 0)
         let transaction = Transaction(refBlockNum: 0, refBlockPrefix: 0, expiration: expiration, createdTime: 0, operations: operations)

@@ -30,44 +30,116 @@ class ClientTest: XCTestCase {
             }
         }
     }
+    
+    func testGetVersion() {
 
+        let test = expectation(description: "Response")
+        let req = API.GetVersion()
+        do{
+            let res = try client.sendSynchronous(req)
+            print(res)
+        }catch{
+
+        }
+    }
+    
+
+    func testGetConfig() {
+
+            let test = expectation(description: "Response")
+            let req = API.GetConfig()
+            do{
+                let res = try client.sendSynchronous(req)
+                print(res)
+            }catch{
+
+            }
+        }
+    
     func testGlobalProps() {
-        
+
         let test = expectation(description: "Response")
         let req = API.GetDynamicGlobalProperties()
-        client.send(req) { res, error in
-            XCTAssertNil(error)
-            XCTAssertNotNil(res)
-//            XCTAssertEqual(res?.currentSupply.symbol.name, "BWF")
-            test.fulfill()
+        do{
+            let res = try client.sendSynchronous(req)
+            print(res)
+        }catch{
+            
         }
-        waitForExpectations(timeout: 5) { error in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
-            }
-        }
+//        client.send(req) { res, error in
+//            XCTAssertNil(error)
+//            XCTAssertNotNil(res)
+////            XCTAssertEqual(res?.currentSupply.symbol.name, "BWF")
+//            test.fulfill()
+//        }
+//        waitForExpectations(timeout: 5) { error in
+//            if let error = error {
+//                print("Error: \(error.localizedDescription)")
+//            }
+//        }
     }
 
+    func testGetSupernodeSchedule() {
+
+            let test = expectation(description: "Response")
+//        let req = API.GetHardforkVersion()
+//            let req = API.GetSupernodeSchedule()
+//        let req = API.GetTransaction(txId: "d0bf0b4aaff82b925de2d9a1451478cc10dd7c1e")
+//        let req = API.GetSupernodes(ids: [1])
+//        let req = API.GetSupernodeByVote(lowerBound: "a",limit: 10)
+//        let req = API.LookupSupernodeAccounts(lowerBound: "a",limit: 10)
+//        let req = API.GetSupernodeVoted(account:"beowulf")
+//        let req = API.GetKeyReferences(publicKey:["BEO5r5ceRhRFe4j1BCpp4eKwLkB7MRo41yrGzpjHakTB4KDMicxnC"])
+//        let req = API.ListTokens()
+//        let req = API.GetTokens(name: ["NLP"])
+        let req = API.GetBalance(account: "nghia", tokenName: "NLP", decimals: 5)
+            do{
+                let res = try client.sendSynchronous(req)
+                print(res)
+            }catch{
+                
+            }
+        }
+    
     func testGetBlock() {
-        let test = expectation(description: "Response")
-        let req = API.GetBlock(blockNum: 12_345_678)
-        client.send(req) { block, error in
-            XCTAssertNil(error)
-            XCTAssertEqual(block?.previous.num, 12_345_677)
-            XCTAssertEqual(block?.transactions.count, 7)
-            test.fulfill()
-        }
-        waitForExpectations(timeout: 5) { error in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
-            }
-        }
+        var res = GetBlock(client: client, blockNum: 3584405)
+        print (res)
+//        let test = expectation(description: "Response")
+//        let req = API.GetBlock(blockNum: 3584405)
+//        do{
+//            let res = try client.sendSynchronous(req)
+//            print(res)
+//        }catch{
+//
+//        }
+//        client.send(req) { block, error in
+//            XCTAssertNil(error)
+//            XCTAssertEqual(block?.previous.num, 12_345_677)
+//            XCTAssertEqual(block?.transactions.count, 7)
+//            test.fulfill()
+//        }
+//        waitForExpectations(timeout: 5) { error in
+//            if let error = error {
+//                print("Error: \(error.localizedDescription)")
+//            }
+//        }
     }
 
+    func testGetBlockHeader() {
+            let test = expectation(description: "Response")
+            let req = API.GetBlockHeader(blockNum: 3584405)
+            do{
+                let res = try client.sendSynchronous(req)
+                print(res)
+            }catch{
+                
+            }
+        }
+    
     func testBroadcast() {
 //        let test = expectation(description: "Response")
 //        let key = PrivateKey("5JQzF7rejVDDFYqCtm4ypcNHhP8Zru6hY1bpALxjNWKtm2yBqC9")!
-//        var comment = Operation.Comment(
+//        var comment = Operation.AccountCreate((
 //            title: "Hello from Swift",
 //            body: "The time is \(Date()) and I'm running tests.",
 //            author: "swift",
@@ -108,6 +180,14 @@ class ClientTest: XCTestCase {
     }
 
     func testGetAccount() throws {
+        let test = expectation(description: "Response")
+        let req = API.GetAccounts(names: ["beowulf"])
+        do{
+            let res = try client.sendSynchronous(req)
+            print(res)
+        }catch{
+            
+        }
 //        let result = try client.sendSynchronous(API.GetAccounts(names: ["almost-digital"]))
 //        guard let account = result?.first else {
 //            XCTFail("No account returned")

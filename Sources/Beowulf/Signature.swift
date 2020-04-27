@@ -5,9 +5,9 @@ import Foundation
 /// A Beowulf signature.
 public struct Signature: Equatable, LosslessStringConvertible {
     private let signature: Data
-    private let recoveryId: UInt8
+    private let recoveryId: Int32
 
-    internal init(signature: Data, recoveryId: UInt8) {
+    internal init(signature: Data, recoveryId: Int32) {
         self.signature = signature
         self.recoveryId = recoveryId
     }
@@ -18,7 +18,9 @@ public struct Signature: Equatable, LosslessStringConvertible {
         guard data.count == 65 else {
             return nil
         }
-        self.init(signature: data.suffix(from: 1), recoveryId: data[0] - 31)
+        print("signature: \(data.suffix(from: 1))")
+        print("recoveryId: \(data[0])")
+        self.init(signature: data.suffix(from: 1), recoveryId: Int32(data[0]) - 31)
     }
 
     /// Create a new signature from a hex encoded string.
@@ -41,7 +43,7 @@ public struct Signature: Equatable, LosslessStringConvertible {
     /// Hex string representation of signature.
     public var description: String {
         var data = self.signature
-        data.insert(self.recoveryId + 31, at: data.startIndex)
+        data.insert(UInt8(self.recoveryId + 31), at: data.startIndex)
         return data.hexEncodedString()
     }
 }

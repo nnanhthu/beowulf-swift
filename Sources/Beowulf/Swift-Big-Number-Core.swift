@@ -163,6 +163,7 @@ infix operator ** : ExponentiationPrecedence
 ///		... +
 ///		(ln * 2^(n*64))
 public struct BInt:
+    Codable,
 	SignedNumeric, // Implies Numeric, Equatable, ExpressibleByIntegerLiteral
 	BinaryInteger, // Implies Hashable, CustomStringConvertible, Strideable, Comparable
 	ExpressibleByFloatLiteral
@@ -232,6 +233,11 @@ public struct BInt:
 		}
 		return String(format: "%.1f gb", Double(bits) / 8_000_000_000.0)
 	}
+
+    public func encode(to encoder: Encoder) throws {
+        
+    }
+    
 
 	//
 	//
