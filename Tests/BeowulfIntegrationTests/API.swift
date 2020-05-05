@@ -197,4 +197,11 @@ class ClientTest: XCTestCase {
 //        XCTAssertEqual(account.name, "almost-digital")
 //        XCTAssertEqual(account.created, Date(timeIntervalSince1970: 1_496_691_060))
     }
+    
+    func testValidate(){
+//        var str = ValidateNameAccount(account: "aaa-4")
+//        var valid = ValidateFee(fee: "0.01000 W", minFee: 1000)
+//        var str = RandStringBytes(length: 10)
+        var wallet = GenKeys(newAccountName: "thu")
+    }
 }

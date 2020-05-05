@@ -116,3 +116,4 @@ extension PublicKey.AddressPrefix: ExpressibleByStringLiteral, LosslessStringCon
         }
     }
 }
+
