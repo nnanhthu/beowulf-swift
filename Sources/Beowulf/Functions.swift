@@ -14,6 +14,7 @@ var Checksum_: [UInt8] = []
 var Wallet_ = Wallet()
 var Locked = true
 var WalletName_ = "wallet.json"
+var CurrentKeys_ : [String] = []
 
 public func GetBlock(client: Beowulf.Client, blockNum: Int) -> SignedBlock?{
     let req = API.GetBlock(blockNum: blockNum)
@@ -98,59 +99,57 @@ func ValidateAmount(amount:String) -> Bool{
     return true
 }
 
+func sendTrx(client: Beowulf.Client, op: OperationType, chain: ChainId) -> API.TransactionConfirmation?{
+    let req = API.GetDynamicGlobalProperties()
+    do{
+        let props = try client.sendSynchronous(req)
+        print(props)
+        let expiry = props!.time.addingTimeInterval(60)
+        let tx = Transaction(
+            refBlockNum: UInt16(props!.headBlockNumber & 0xFFFF),
+            refBlockPrefix: props!.headBlockId.prefix,
+            expiration: expiry,
+            createdTime: 1588827117,
+            operations: [op])
+        var keys : [PrivateKey] = []
+        for key in CurrentKeys_{
+            keys.append(PrivateKey(key)!)
+        }
+        guard let stx = try? tx.sign(usingKey: keys, forChain: chain) else {
+            return nil
+        }
+        let txRes = try client.sendSynchronous(API.BroadcastTransaction(transaction: stx))
+        print(txRes)
+        return txRes
+    }catch{
+        return nil
+    }
+}
 
+public func AccountCreate(client: Beowulf.Client, creator: String, newAccountName: String, publicKey: String, fee: String, chain: ChainId) -> API.TransactionConfirmation? {
 
-//public func AccountCreate(client: Beowulf.Client, creator: String, newAccountName: String, publicKey: String, fee: String, chain: ChainId) {
-//
-//    var err = ValidateNameAccount(account: newAccountName)
-//    if err != nil{
-//        return nil
-//    }else{
-//        var validate = ValidateFee(fee: fee, minFee: 10000)
-//        if validate == false{
-//            return nil
-//        }
-//        var pub = PublicKey(publicKey)
-//        var keyAuth = Authority.Auth(pub, weight: 1)
-//        var owner = Authority(weightThreshold: 1, accountAuths: [], keyAuths: [keyAuth])
-//        var comment = Operation.AccountCreate((
-//            fee: Asset(fee),
-//            creator: creator,
-//            newAccountName: newAccountName,
-//            owner: owner
-//            jsonMetadata:""
-//        ))
-//
-//        client.send(API.GetDynamicGlobalProperties()) { props, error in
-//            XCTAssertNil(error)
-//            guard let props = props else {
-//                return XCTFail("Unable to get props")
-//            }
-//            let expiry = props.time.addingTimeInterval(60)
-//            let tx = Transaction(
-//                refBlockNum: UInt16(props.headBlockNumber & 0xFFFF),
-//                refBlockPrefix: props.headBlockId.prefix,
-//                expiration: expiry,
-//                operations: [comment])
-//            guard let stx = try? tx.sign(usingKey: key, forChain: chain) else {
-//                return XCTFail("Unable to sign tx")
-//            }
-//            client.send(API.BroadcastTransaction(transaction: stx)) { res, error in
-//                XCTAssertNil(error)
-//                if let res = res {
-//                    XCTAssertFalse(res.expired)
-//                    XCTAssert(res.blockNum > props.headBlockId.num)
-//                } else {
-//                    XCTFail("No response")
-//                }
-//                test.fulfill()
-//            }
-//        }
-//        waitForExpectations(timeout: 10) { error in
-//            if let error = error {
-//                print("Error: \(error.localizedDescription)")
-//            }
-//        }
-//    }
-//}
+    var err = ValidateNameAccount(account: newAccountName)
+    if err != nil{
+        return nil
+    }else{
+        let validate = ValidateFee(fee: fee, minFee: 10000)
+        if validate == false{
+            return nil
+        }
+        let pub = PublicKey(publicKey)!
+        let keyAuth = Authority.Auth(pub, weight: 1)
+        var keyAuths : [Authority.Auth<PublicKey>] = []
+        keyAuths.append(keyAuth)
+        let owner = Authority(weightThreshold: 1, accountAuths: [], keyAuths: keyAuths)
+        let accountCreate = Operation.AccountCreate(
+            fee: Asset(fee)!,
+            creator: creator,
+            newAccountName: newAccountName,
+            owner: owner,
+            jsonMetadata:""
+        )
+        
+        return sendTrx(client: client, op: accountCreate, chain: chain)
+    }
+}
 

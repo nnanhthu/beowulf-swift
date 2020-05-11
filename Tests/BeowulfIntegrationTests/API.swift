@@ -1,5 +1,6 @@
 @testable import Beowulf
 import XCTest
+import CommonCrypto
 
 struct HelloRequest: Request {
     typealias Response = String
@@ -137,46 +138,13 @@ class ClientTest: XCTestCase {
         }
     
     func testBroadcast() {
-//        let test = expectation(description: "Response")
-//        let key = PrivateKey("5JQzF7rejVDDFYqCtm4ypcNHhP8Zru6hY1bpALxjNWKtm2yBqC9")!
-//        var comment = Operation.AccountCreate((
-//            title: "Hello from Swift",
-//            body: "The time is \(Date()) and I'm running tests.",
-//            author: "swift",
-//            permlink: "hey-eveyone-im-running-swift-tests-and-the-time-is-\(UInt32(Date().timeIntervalSinceReferenceDate))"
-//        )
-//        comment.parentPermlink = "test"
-//        let vote = Operation.Vote(voter: "swift", author: "swift", permlink: comment.permlink)
-//        testnetClient.send(API.GetDynamicGlobalProperties()) { props, error in
-//            XCTAssertNil(error)
-//            guard let props = props else {
-//                return XCTFail("Unable to get props")
-//            }
-//            let expiry = props.time.addingTimeInterval(60)
-//            let tx = Transaction(
-//                refBlockNum: UInt16(props.headBlockNumber & 0xFFFF),
-//                refBlockPrefix: props.headBlockId.prefix,
-//                expiration: expiry,
-//                operations: [comment, vote])
-//            guard let stx = try? tx.sign(usingKey: key, forChain: testnetId) else {
-//                return XCTFail("Unable to sign tx")
-//            }
-//            testnetClient.send(API.BroadcastTransaction(transaction: stx)) { res, error in
-//                XCTAssertNil(error)
-//                if let res = res {
-//                    XCTAssertFalse(res.expired)
-//                    XCTAssert(res.blockNum > props.headBlockId.num)
-//                } else {
-//                    XCTFail("No response")
-//                }
-//                test.fulfill()
-//            }
-//        }
-//        waitForExpectations(timeout: 10) { error in
-//            if let error = error {
-//                print("Error: \(error.localizedDescription)")
-//            }
-//        }
+        
+//        ImportKey(wif: "5JEsAzMxv5E1djK7EGzeBCG85EeHf798UJbEYfSKihM1vTVVwQc", name: "initminer")
+//        let wl = GenKeys(newAccountName: "test")
+//        SaveWalletFile(walletPath: "wallet", walletFilename: "", password: "12345678", walletData: wl)
+        SetKeysFromFileWallet(pathFileWallet: "wallet/test-wallet.json", password: "12345678")
+        
+        
     }
 
     func testGetAccount() throws {

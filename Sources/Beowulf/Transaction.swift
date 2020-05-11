@@ -3,6 +3,29 @@
 import AnyCodable
 import Foundation
 
+public struct ExtensionJsonType: Codable {
+    public var data: String
+    public init?(){
+        self.data = ""
+    }
+    enum CodingKeys: String, CodingKey {
+        case data = "data"
+    }
+}
+
+public struct ExtensionType: Codable{
+    public var type: UInt8
+    public var value: ExtensionJsonType?
+    public init?(){
+        self.type = 1
+        self.value = ExtensionJsonType()
+    }
+    enum CodingKeys: String, CodingKey {
+        case type = "type"
+        case value = "value"
+    }
+}
+
 fileprivate protocol _Transaction: BeowulfEncodable, Decodable {
     /// Block number reference.
     var refBlockNum: UInt16 { get }
@@ -48,9 +71,11 @@ public init(refBlockNum: UInt16, refBlockPrefix: UInt32, expiration: Date, creat
     }
 
     /// Sign transaction.
-    public func sign(usingKey key: PrivateKey, forChain chain: ChainId = .mainNet) throws -> SignedTransaction {
+    public func sign(usingKey key: [PrivateKey], forChain chain: ChainId = .mainNet) throws -> SignedTransaction {
         var signed = SignedTransaction(transaction: self)
-        try signed.appendSignature(usingKey: key, forChain: chain)
+        for pk in key{
+            try signed.appendSignature(usingKey: pk, forChain: chain)
+        }
         return signed
     }
 

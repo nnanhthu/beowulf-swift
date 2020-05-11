@@ -37,7 +37,7 @@ class TransactionTest: XCTestCase {
         XCTAssertEqual(try transaction.digest(forChain: .mainNet), Data("44424a1259aba312780ca6957a91dbd8a8eef8c2c448d89eccee34a425c77512"))
         let customChain = Data("79276aea5d4877d9a25892eaa01b0adf019d3e5cb12a97478df3298ccdd01673")
         XCTAssertEqual(try transaction.digest(forChain: .custom(customChain)), Data("43ca08db53ad0289ccb268654497e0799c02b50ac8535e0c0f753067417be953"))
-        var signedTransaction = try transaction.sign(usingKey: key)
+        var signedTransaction = try transaction.sign(usingKey: [key])
         try signedTransaction.appendSignature(usingKey: key, forChain: .custom(customChain))
         XCTAssertEqual(signedTransaction.signatures, [
             Signature("1f6a3575e6e47fe5726579107a7e42d58d897efc74f7110bac8d5c12d009ecfb6b3731449328693b7b6fbbc835fe55f9cdb9a539219ef5c9af744a9c1b6a42fce0"),
