@@ -9,7 +9,7 @@ public protocol OperationType: BeowulfCodable {}
 public struct Operation {
 
     /// Transfers assets from one account to another.
-    public struct Transfer: OperationType, Equatable, BeowulfEncodable, Decodable {
+    public struct Transfer: OperationType, Equatable {
         /// Account name of the sender.
         public var from: String
         /// Account name of the reciever.
@@ -29,15 +29,6 @@ public struct Operation {
             self.memo = memo
         }
         
-        public func encode(to encoder: Encoder) throws {
-//            try encoder.encode(self.rawValue)
-            var container = encoder.unkeyedContainer()
-            try container.encode(self.from)
-            try container.encode(self.to)
-            try container.encode(self.amount)
-            try container.encode(self.fee)
-            try container.encode(self.memo)
-        }
     }
 
     /// Converts BWF to VESTS, aka. "Powering Up".

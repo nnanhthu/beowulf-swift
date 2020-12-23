@@ -104,13 +104,9 @@ func sendTrx(client: Beowulf.Client, op: OperationType, chain: ChainId) -> API.T
     do{
         let props = try client.sendSynchronous(req)
         print(props)
-//        let date = Date(timeIntervalSince1970: 1608724800)
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyy-MM-ddTHH:mm:ss"
-//
-//        let ex = formatter.string(from: date)
         print("Date now:", Date())
-        let expiry = Date().addingTimeInterval(3600).timeIntervalSince1970// props!.time.addingTimeInterval(60)
+        let expirationTime = 59*60 //in second
+        let expiry = Date().addingTimeInterval(TimeInterval(expirationTime)).timeIntervalSince1970// props!.time.addingTimeInterval(60)
         let expiration = Date(timeIntervalSince1970: expiry)
         print(expiration)
         let now = Date()

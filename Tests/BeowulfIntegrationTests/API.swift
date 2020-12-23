@@ -176,9 +176,9 @@ class ClientTest: XCTestCase {
             "5JHTf7dkpVxQNcb5NWc7URTrHDgAFEyxn2BEnMjuJ6fJrCAniCQ"
 //        keys["BEO5r5ceRhRFe4j1BCpp4eKwLkB7MRo41yrGzpjHakTB4KDMicxnC"] = "5JrfnT23TfZSg6xHtBpsc7NRuGNakCiGUZ5WN1tNUJBVkWapYfb"
         SetKeys(keys: keys)
-        var trx = AccountCreate(client: client, creator: "beowulf", newAccountName: "acc2", publicKey: wallet!.publicKey, fee: "0.10000 W", chain: .testNet)
+//        var trx = AccountCreate(client: client, creator: "beowulf", newAccountName: "acc2", publicKey: wallet!.publicKey, fee: "0.10000 W", chain: .testNet)
         
-        trx = Transfer(client: client, from: "beowulf", to: "acc1", amount: "0.01000 W", fee: "0.01000 W", memo: "", chain: .testNet)
+        let trx = Transfer(client: client, from: "beowulf", to: "acc1", amount: "0.01000 W", fee: "0.01000 W", memo: "", chain: .testNet)
         print (trx)
     }
 }
