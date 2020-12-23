@@ -170,6 +170,15 @@ class ClientTest: XCTestCase {
 //        var str = ValidateNameAccount(account: "aaa-4")
 //        var valid = ValidateFee(fee: "0.01000 W", minFee: 1000)
 //        var str = RandStringBytes(length: 10)
-        var wallet = GenKeys(newAccountName: "thu")
+        var wallet = GenKeys(newAccountName: "acc2")
+        var keys : [String:String] = [:]
+        keys["BEO57qTuXxtnc7KDJ4t5zSoJimzpR2SgV9SQDsu5q4NMSkKLUwsA6"] =
+            "5JHTf7dkpVxQNcb5NWc7URTrHDgAFEyxn2BEnMjuJ6fJrCAniCQ"
+//        keys["BEO5r5ceRhRFe4j1BCpp4eKwLkB7MRo41yrGzpjHakTB4KDMicxnC"] = "5JrfnT23TfZSg6xHtBpsc7NRuGNakCiGUZ5WN1tNUJBVkWapYfb"
+        SetKeys(keys: keys)
+        var trx = AccountCreate(client: client, creator: "beowulf", newAccountName: "acc2", publicKey: wallet!.publicKey, fee: "0.10000 W", chain: .testNet)
+        
+        trx = Transfer(client: client, from: "beowulf", to: "acc1", amount: "0.01000 W", fee: "0.01000 W", memo: "", chain: .testNet)
+        print (trx)
     }
 }

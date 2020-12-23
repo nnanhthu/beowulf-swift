@@ -104,13 +104,23 @@ func sendTrx(client: Beowulf.Client, op: OperationType, chain: ChainId) -> API.T
     do{
         let props = try client.sendSynchronous(req)
         print(props)
-        let expiry = props!.time.addingTimeInterval(60)
+//        let date = Date(timeIntervalSince1970: 1608724800)
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "yyyy-MM-ddTHH:mm:ss"
+//
+//        let ex = formatter.string(from: date)
+        print("Date now:", Date())
+        let expiry = Date().addingTimeInterval(3600).timeIntervalSince1970// props!.time.addingTimeInterval(60)
+        let expiration = Date(timeIntervalSince1970: expiry)
+        print(expiration)
+        let now = Date()
         let tx = Transaction(
             refBlockNum: UInt16(props!.headBlockNumber & 0xFFFF),
             refBlockPrefix: props!.headBlockId.prefix,
-            expiration: expiry,
-            createdTime: 1588827117,
-            operations: [op])
+            expiration: expiration,
+            createdTime: UInt64(now.timeIntervalSince1970),
+            operations: [op],
+            extensions: [])
         var keys : [PrivateKey] = []
         for key in CurrentKeys_{
             keys.append(PrivateKey(key)!)
@@ -153,3 +163,24 @@ public func AccountCreate(client: Beowulf.Client, creator: String, newAccountNam
     }
 }
 
+public func Transfer(client: Beowulf.Client, from: String, to: String, amount: String, fee: String, memo: String, chain: ChainId) -> API.TransactionConfirmation? {
+
+    var valid = ValidateAmount(amount: amount)
+    if valid == false{
+        return nil
+    }else{
+        let validate = ValidateFee(fee: fee, minFee: 1000)
+        if validate == false{
+            return nil
+        }
+        
+        let transferOp = Operation.Transfer(
+            from: from,
+            to: to,
+            amount: Asset(amount)!,
+            fee: Asset(fee)!,
+            memo: memo)
+        
+        return sendTrx(client: client, op: transferOp, chain: chain)
+    }
+}

@@ -135,12 +135,12 @@ extension Asset: BeowulfEncodable, Decodable {
 
     public func binaryEncode(to encoder: BeowulfEncoder) throws {
         try encoder.encode(self.amount)
-        try encoder.encode(self.symbol.decimals)
+        try encoder.encode(UInt32(self.symbol.decimals))
         let chars = self.symbol.name.utf8
         for char in chars {
             encoder.data.append(char)
         }
-        for _ in 0 ..< 7 - chars.count {
+        for _ in 0 ..< 9 - chars.count {
             encoder.data.append(0)
         }
     }

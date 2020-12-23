@@ -9,7 +9,7 @@ public protocol OperationType: BeowulfCodable {}
 public struct Operation {
 
     /// Transfers assets from one account to another.
-    public struct Transfer: OperationType, Equatable {
+    public struct Transfer: OperationType, Equatable, BeowulfEncodable, Decodable {
         /// Account name of the sender.
         public var from: String
         /// Account name of the reciever.
@@ -27,6 +27,16 @@ public struct Operation {
             self.amount = amount
             self.fee = fee
             self.memo = memo
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+//            try encoder.encode(self.rawValue)
+            var container = encoder.unkeyedContainer()
+            try container.encode(self.from)
+            try container.encode(self.to)
+            try container.encode(self.amount)
+            try container.encode(self.fee)
+            try container.encode(self.memo)
         }
     }
 
@@ -98,13 +108,13 @@ public struct Operation {
     public struct AccountUpdate: OperationType, Equatable {
         public var account: String
         public var owner: Authority?
-        public var fee: Asset
+        public var fee: String
         public var jsonMetadata: String
 
         public init(
             account: String,
             owner: Authority?,
-            fee: Asset,
+            fee: String,
             jsonMetadata: String = ""
         ) {
             self.account = account

@@ -37,6 +37,8 @@ public class BeowulfEncoder {
     public static func encode(_ value: BeowulfEncodable) throws -> Data {
         let encoder = BeowulfEncoder()
         try value.binaryEncode(to: encoder)
+        print("=======================")
+        print(encoder.data.hexEncodedString())
         return encoder.data
     }
 

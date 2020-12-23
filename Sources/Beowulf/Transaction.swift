@@ -34,7 +34,7 @@ fileprivate protocol _Transaction: BeowulfEncodable, Decodable {
     /// Transaction expiration.
     var expiration: Date { get }
     /// Protocol extensions.
-    var extensions: [String] { get }
+    var extensions: [ExtensionType] { get }
     /// Transaction operations.
     var operations: [OperationType] { get }
     /// Transaction created time
@@ -47,7 +47,7 @@ public struct Transaction: _Transaction {
     public var refBlockNum: UInt16
     public var refBlockPrefix: UInt32
     public var expiration: Date
-    public var extensions: [String]
+    public var extensions: [ExtensionType]
     public var operations: [OperationType] {
         return self._operations.map { $0.operation }
     }
@@ -56,7 +56,7 @@ public struct Transaction: _Transaction {
     internal var _operations: [AnyOperation]
 
     /// Create a new transaction.
-public init(refBlockNum: UInt16, refBlockPrefix: UInt32, expiration: Date, createdTime: UInt64, operations: [OperationType] = [], extensions: [String] = []) {
+public init(refBlockNum: UInt16, refBlockPrefix: UInt32, expiration: Date, createdTime: UInt64, operations: [OperationType] = [], extensions: [ExtensionType] = []) {
         self.refBlockNum = refBlockNum
         self.refBlockPrefix = refBlockPrefix
         self.expiration = expiration
@@ -83,6 +83,8 @@ public init(refBlockNum: UInt16, refBlockPrefix: UInt32, expiration: Date, creat
     public func digest(forChain chain: ChainId = .mainNet) throws -> Data {
         var data = chain.data
         data.append(try BeowulfEncoder.encode(self))
+//        var data = try BeowulfEncoder.encode(self)
+        print(data.sha256Digest())
         return data.sha256Digest()
     }
 }
@@ -135,7 +137,7 @@ public struct SignedTransaction: _Transaction, Equatable {
         return self.transaction.expiration
     }
 
-    public var extensions: [String] {
+    public var extensions: [ExtensionType] {
         return self.transaction.extensions
     }
 
@@ -157,7 +159,7 @@ public struct TransactionResponse: _Transaction {
     public var refBlockNum: UInt16
     public var refBlockPrefix: UInt32
     public var expiration: Date
-    public var extensions: [String]
+    public var extensions: [ExtensionType]
     public var operations: [OperationType] {
         return self._operations.map { $0.operation }
     }
@@ -221,7 +223,7 @@ extension TransactionResponse {
         self.refBlockPrefix = try container.decode(UInt32.self, forKey: .refBlockPrefix)
         self.expiration = try container.decode(Date.self, forKey: .expiration)
         self._operations = try container.decode([AnyOperation].self, forKey: .operations)
-        self.extensions = try container.decode([String].self, forKey: .extensions)
+        self.extensions = try container.decode([ExtensionType].self, forKey: .extensions)
         self.createdTime = try container.decode(UInt64.self, forKey: .createdTime)
         self.signatures = try container.decode([String].self, forKey: .signatures)
         self.transactionId = try container.decode(String.self, forKey: .transactionId)
@@ -263,7 +265,7 @@ extension Transaction {
         self.refBlockPrefix = try container.decode(UInt32.self, forKey: .refBlockPrefix)
         self.expiration = try container.decode(Date.self, forKey: .expiration)
         self._operations = try container.decode([AnyOperation].self, forKey: .operations)
-        self.extensions = try container.decode([String].self, forKey: .extensions)
+        self.extensions = try container.decode([ExtensionType].self, forKey: .extensions)
         self.createdTime = try container.decode(UInt64.self, forKey: .createdTime)
     }
 
@@ -307,9 +309,14 @@ extension SignedTransaction {
             for operation in self._operations {
                 try operation.binaryEncode(to: encoder)
             }
-            encoder.appendVarint(UInt64(self.extensions.count))
-            for ext in self.extensions {
-                ext.binaryEncode(to: encoder)
+            if self.extensions.count > 0{
+                encoder.appendVarint(UInt64(self.extensions.count))
+                for ext in self.extensions {
+//                    ext.binaryEncode(to: encoder)
+                    try encoder.encode(ext)
+                }
+            }else{
+                encoder.appendVarint(0)
             }
             try encoder.encode(self.createdTime)
         }
