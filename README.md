@@ -40,6 +40,7 @@ How to use
 
 Example: 
 1. Creating a new account:
+```
 let client = Beowulf.Client(address: URL(string: "https://testnet-bw.beowulfchain.com/rpc")!)
 var wallet = GenKeys(newAccountName: "acc2")
 var keys : [String:String] = [:]
@@ -48,8 +49,11 @@ SetKeys(keys: keys)
 let creator = “creator” // name of creator
 let new_account = “account” // name of newaccount
 AccountCreate(client: client, creator: creator, newAccountName: new_account, publicKey: wallet!.publicKey, fee: "0.10000 W", chain: .testNet)
+```
 
 2. Transfer:
+```
 let from_account = "from" // account name send coin
 let to_account = "to" // account name receive coin
 Transfer(client: client, from: from_account, to: to_account, amount: "0.01000 W", fee: "0.01000 W", memo: "", chain: .testNet)
+```
