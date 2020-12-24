@@ -51,9 +51,46 @@ let new_account = “account” // name of newaccount
 AccountCreate(client: client, creator: creator, newAccountName: new_account, publicKey: wallet!.publicKey, fee: "0.10000 W", chain: .testNet)
 ```
 
-2. Transfer:
+2. Set password to lock wallet. After setting password, wallet will be locked.
 ```
-let from_account = "from" // account name send coin
+SetPassword(password: "password")
+```
+
+3. Unlock wallet to submit transaction
+```
+Unlock(password: "password")
+```
+
+4. Import private key for 1 account
+```
+let private_key = "5xxxx"
+let account_name = "account"
+ImportKey(wif: private_key, name: account_name) 
+```
+
+5. Save wallet file
+```
+let path = "wallet" // path of location to save wallet file
+let wallet_filename = "" // name of wallet file
+let password = "password" // password of wallet set at 2
+let wallet_data = xxx // returned from GenKeys function
+SaveWalletFile(walletPath: path, walletFilename: wallet_filename, password: password, walletData: wallet_data)
+```
+
+6. Load keys from wallet file
+```
+let path = "wallet/test-wallet.json" // path to wallet file
+let password = "password" // password of wallet set at 2
+SetKeysFromFileWallet(pathFileWallet: path, password: password)
+```
+
+7. Transfer:
+```
+// Import key of from_account to submit transaction
+let private_key = "5xxxx"
+let account_name = "from"
+ImportKey(wif: private_key, name: account_name) 
+let from_account = account_name// account name send coin
 let to_account = "to" // account name receive coin
 Transfer(client: client, from: from_account, to: to_account, amount: "0.01000 W", fee: "0.01000 W", memo: "", chain: .testNet)
 ```
