@@ -61,7 +61,7 @@ SetPassword(password: "password")
 Unlock(password: "password")
 ```
 
-4. Import private key for 1 account
+4. Import private key for 1 account. Wallet must be unlocked before importing key.
 ```
 let private_key = "5xxxx"
 let account_name = "account"
