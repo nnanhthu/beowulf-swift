@@ -104,7 +104,7 @@ public struct Asset: Equatable {
     }
 }
 
-public extension Asset: LosslessStringConvertible {
+extension Asset: LosslessStringConvertible {
     public var description: String {
         let value = Double(self.amount) / pow(10, Double(self.symbol.decimals))
         let formatter = NumberFormatter()
@@ -118,7 +118,7 @@ public extension Asset: LosslessStringConvertible {
     }
 }
 
-public extension Asset: BeowulfEncodable, Decodable {
+extension Asset: BeowulfEncodable, Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let value = try container.decode(String.self)

@@ -28,7 +28,7 @@ public extension Authority.Auth {
     }
 }
 
-public extension Authority.Auth: BeowulfCodable {
+ extension Authority.Auth: BeowulfCodable {
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         self.value = try container.decode(T.self)
@@ -42,7 +42,7 @@ public extension Authority.Auth: BeowulfCodable {
     }
 }
 
-public extension Authority.Auth: ExpressibleByDictionaryLiteral {
+ extension Authority.Auth: ExpressibleByDictionaryLiteral {
     public typealias Key = T
     public typealias Value = UInt16
     public init(dictionaryLiteral elements: (T, UInt16)...) {

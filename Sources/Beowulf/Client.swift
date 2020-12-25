@@ -26,9 +26,9 @@ public protocol Request {
     /// Request parameter type.
     associatedtype Params: Encodable
     /// JSON-RPC 2.0 method to call.
-    public var method: String { get }
+    var method: String { get }
     /// JSON-RPC 2.0 parameters
-    public var params: Params? { get }
+    var params: Params? { get }
 }
 
 // Default implementation sends a request without params.
@@ -54,8 +54,8 @@ public struct RequestParams<T: Encodable> {
     }
 }
 
-public extension RequestParams: Encodable {
-    public struct Key: CodingKey {
+extension RequestParams: Encodable {
+    struct Key: CodingKey {
         var stringValue: String
         public init?(stringValue: String) {
             self.stringValue = stringValue
@@ -87,7 +87,7 @@ public struct RequestPayload<Request: Beowulf.Request> {
     public let id: Int
 }
 
-public extension RequestPayload: Encodable {
+extension RequestPayload: Encodable {
     fileprivate enum Keys: CodingKey {
         case id
         case jsonrpc

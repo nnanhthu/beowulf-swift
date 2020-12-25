@@ -5,9 +5,9 @@
 import Crypto
 import Foundation
 
-public extension Data {
+ extension Data {
     /// Base58 encoding and decoding options.
-    public struct Base58CheckOptions: OptionSet {
+     struct Base58CheckOptions: OptionSet {
         public let rawValue: Int
         /// Use graphene-style ripem160 checksum.
         public static let grapheneChecksum = Base58CheckOptions(rawValue: 1 << 0)
@@ -17,7 +17,7 @@ public extension Data {
      Creates a new data buffer from a Base58Check-encoded string.
      - note: Returns nil if the check fails or if the string decodes to more than 128 bytes.
     */
-    public init?(base58CheckEncoded str: String, options: Base58CheckOptions = []) {
+     init?(base58CheckEncoded str: String, options: Base58CheckOptions = []) {
         let len = str.count
         let data = UnsafeMutablePointer<UInt8>.allocate(capacity: len)
         defer { data.deallocate() }
@@ -39,7 +39,7 @@ public extension Data {
      - parameter graphene: Whether to encode with graphene-style ripem160 checksum or double-sha256.
      - note: Returns nil for any data buffer larger than 128 bytes.
      */
-    public func base58CheckEncodedString(options: Base58CheckOptions = []) -> String? {
+     func base58CheckEncodedString(options: Base58CheckOptions = []) -> String? {
         let len = self.count * 2
         let str = UnsafeMutablePointer<Int8>.allocate(capacity: len)
         defer { str.deallocate() }

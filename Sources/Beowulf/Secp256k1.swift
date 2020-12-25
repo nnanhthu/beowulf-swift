@@ -3,7 +3,7 @@
 import Foundation
 import secp256k1
 
-public class Secp256k1Context {
+class Secp256k1Context {
     public struct Flags: OptionSet {
         let rawValue: Int32
         static let none = Flags(rawValue: SECP256K1_CONTEXT_NONE)
@@ -37,7 +37,7 @@ public class Secp256k1Context {
         }
     }
 
-    public deinit {
+    deinit {
         secp256k1_context_destroy(self.ctx)
     }
 

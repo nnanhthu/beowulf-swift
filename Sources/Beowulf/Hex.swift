@@ -2,7 +2,7 @@
 
 import Foundation
 
-public extension Data {
+extension Data {
     public init(hexEncoded string: String) {
         let nibbles = string.unicodeScalars
             .map { $0.hexNibble }
@@ -18,12 +18,12 @@ public extension Data {
         self = Data(bytes: bytes)
     }
 
-    public struct HexEncodingOptions: OptionSet {
-        let rawValue: Int
+    struct HexEncodingOptions: OptionSet {
+        public let rawValue: Int
         static let upperCase = HexEncodingOptions(rawValue: 1 << 0)
     }
 
-    public func hexEncodedString(options: HexEncodingOptions = []) -> String {
+    func hexEncodedString(options: HexEncodingOptions = []) -> String {
         let hexDigits = Array((options.contains(.upperCase) ? "0123456789ABCDEF" : "0123456789abcdef").utf16)
         var chars: [unichar] = []
         chars.reserveCapacity(2 * count)

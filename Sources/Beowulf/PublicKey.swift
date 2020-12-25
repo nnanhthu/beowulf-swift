@@ -55,17 +55,17 @@ public struct PublicKey: Equatable {
     }
 }
 
-public extension PublicKey: Hashable {
+extension PublicKey: Hashable {
     public var hashValue: Int {
         return self.key.withUnsafeBytes { $0.pointee } + self.prefix.hashValue
     }
 }
 
-public extension PublicKey: LosslessStringConvertible {
+extension PublicKey: LosslessStringConvertible {
     public var description: String { return self.address }
 }
 
-public extension PublicKey: BeowulfEncodable, Decodable {
+extension PublicKey: BeowulfEncodable, Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         guard let key = PublicKey(try container.decode(String.self)) else {
@@ -84,7 +84,7 @@ public extension PublicKey: BeowulfEncodable, Decodable {
     }
 }
 
-public extension PublicKey.AddressPrefix: ExpressibleByStringLiteral, LosslessStringConvertible {
+extension PublicKey.AddressPrefix: ExpressibleByStringLiteral, LosslessStringConvertible {
     public typealias StringLiteralType = String
 
     /// Create new addres prefix from string.

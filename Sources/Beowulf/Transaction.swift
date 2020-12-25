@@ -89,7 +89,7 @@ public init(refBlockNum: UInt16, refBlockPrefix: UInt32, expiration: Date, creat
     }
 }
 
-public extension Transaction: Equatable {
+extension Transaction: Equatable {
     public static func == (lhs: Transaction, rhs: Transaction) -> Bool {
         return (try? lhs.digest()) == (try? rhs.digest())
     }
@@ -195,7 +195,7 @@ public struct TransactionResponse: _Transaction {
     }
 }
 
-public extension TransactionResponse: Equatable {
+extension TransactionResponse: Equatable {
     public static func == (lhs: TransactionResponse, rhs: TransactionResponse) -> Bool {
         return (try? lhs.digest()) == (try? rhs.digest())
     }

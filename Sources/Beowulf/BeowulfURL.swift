@@ -305,7 +305,7 @@ public struct BeowulfURL {
     }
 }
 
-public extension BeowulfURL: CustomStringConvertible {
+extension BeowulfURL: CustomStringConvertible {
     public var description: String {
         guard let url = self.url else {
             return "Invalid BeowulfURL"
@@ -314,7 +314,7 @@ public extension BeowulfURL: CustomStringConvertible {
     }
 }
 
-public extension BeowulfURL: Equatable {
+extension BeowulfURL: Equatable {
     public static func == (lhs: BeowulfURL, rhs: BeowulfURL) -> Bool {
         return lhs.url == rhs.url
     }

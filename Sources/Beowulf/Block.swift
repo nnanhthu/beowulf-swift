@@ -117,7 +117,7 @@ public struct SignedBlock: _BlockHeader, Equatable {
     }
 }
 
-public extension BlockExtension: Codable {
+extension BlockExtension: Codable {
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         let type = try container.decode(Int.self)

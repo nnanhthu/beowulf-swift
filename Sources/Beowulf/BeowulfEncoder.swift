@@ -85,7 +85,7 @@ public class BeowulfEncoder {
 // Encoder conformance.
 // Based on Mike Ash's BinaryEncoder
 // https://github.com/mikeash/BinaryCoder
-public extension BeowulfEncoder: Encoder {
+extension BeowulfEncoder: Encoder {
     public var codingPath: [CodingKey] { return [] }
 
     public var userInfo: [CodingUserInfoKey: Any] { return [:] }
@@ -165,23 +165,23 @@ public extension FixedWidthInteger where Self: BeowulfEncodable {
     }
 }
 
-public extension Int8: BeowulfEncodable {}
-public extension UInt8: BeowulfEncodable {}
-public extension Int16: BeowulfEncodable {}
-public extension UInt16: BeowulfEncodable {}
-public extension Int32: BeowulfEncodable {}
-public extension UInt32: BeowulfEncodable {}
-public extension Int64: BeowulfEncodable {}
-public extension UInt64: BeowulfEncodable {}
+extension Int8: BeowulfEncodable {}
+extension UInt8: BeowulfEncodable {}
+extension Int16: BeowulfEncodable {}
+extension UInt16: BeowulfEncodable {}
+extension Int32: BeowulfEncodable {}
+extension UInt32: BeowulfEncodable {}
+extension Int64: BeowulfEncodable {}
+extension UInt64: BeowulfEncodable {}
 
-public extension String: BeowulfEncodable {
+extension String: BeowulfEncodable {
     public func binaryEncode(to encoder: BeowulfEncoder) {
         encoder.appendVarint(UInt64(self.utf8.count))
         encoder.data.append(contentsOf: self.utf8)
     }
 }
 
-public extension Array: BeowulfEncodable where Element: Encodable {
+extension Array: BeowulfEncodable where Element: Encodable {
     public func binaryEncode(to encoder: BeowulfEncoder) throws {
         encoder.appendVarint(UInt64(self.count))
         for item in self {
@@ -190,7 +190,7 @@ public extension Array: BeowulfEncodable where Element: Encodable {
     }
 }
 
-public extension OrderedDictionary: BeowulfEncodable where Key: BeowulfEncodable, Value: BeowulfEncodable {
+extension OrderedDictionary: BeowulfEncodable where Key: BeowulfEncodable, Value: BeowulfEncodable {
     public func binaryEncode(to encoder: BeowulfEncoder) throws {
         encoder.appendVarint(UInt64(self.count))
         for (key, value) in self {
@@ -200,25 +200,25 @@ public extension OrderedDictionary: BeowulfEncodable where Key: BeowulfEncodable
     }
 }
 
-public extension Date: BeowulfEncodable {
+extension Date: BeowulfEncodable {
     public func binaryEncode(to encoder: BeowulfEncoder) throws {
         try encoder.encode(UInt32(self.timeIntervalSince1970))
     }
 }
 
-public extension Data: BeowulfEncodable {
+ extension Data: BeowulfEncodable {
     public func binaryEncode(to encoder: BeowulfEncoder) {
         encoder.data.append(self)
     }
 }
 
-public extension Bool: BeowulfEncodable {
+ extension Bool: BeowulfEncodable {
     public func binaryEncode(to encoder: BeowulfEncoder) {
         encoder.data.append(self ? 1 : 0)
     }
 }
 
-public extension Optional: BeowulfEncodable where Wrapped: BeowulfEncodable {
+ extension Optional: BeowulfEncodable where Wrapped: BeowulfEncodable {
     public func binaryEncode(to encoder: BeowulfEncoder) throws {
         if let value = self {
             encoder.data.append(1)

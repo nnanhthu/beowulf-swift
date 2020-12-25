@@ -49,7 +49,7 @@ public struct Signature: Equatable, LosslessStringConvertible {
 }
 
 // Codable conformance.
-public extension Signature: Codable {
+extension Signature: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         guard let signature = Signature(try container.decode(String.self)) else {
