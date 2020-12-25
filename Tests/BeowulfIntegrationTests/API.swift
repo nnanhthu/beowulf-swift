@@ -85,7 +85,7 @@ class ClientTest: XCTestCase {
             let test = expectation(description: "Response")
 //        let req = API.GetHardforkVersion()
 //            let req = API.GetSupernodeSchedule()
-//        let req = API.GetTransaction(txId: "d0bf0b4aaff82b925de2d9a1451478cc10dd7c1e")
+        let req = API.GetTransaction(txId: "5473e47bd6d969741f0ea328a19884c4cfc10819")
 //        let req = API.GetSupernodes(ids: [1])
 //        let req = API.GetSupernodeByVote(lowerBound: "a",limit: 10)
 //        let req = API.LookupSupernodeAccounts(lowerBound: "a",limit: 10)
@@ -93,7 +93,7 @@ class ClientTest: XCTestCase {
 //        let req = API.GetKeyReferences(publicKey:["BEO5r5ceRhRFe4j1BCpp4eKwLkB7MRo41yrGzpjHakTB4KDMicxnC"])
 //        let req = API.ListTokens()
 //        let req = API.GetTokens(name: ["NLP"])
-        let req = API.GetBalance(account: "nghia", tokenName: "NLP", decimals: 5)
+//        let req = API.GetBalance(account: "nghia", tokenName: "NLP", decimals: 5)
             do{
                 let res = try client.sendSynchronous(req)
                 print(res)
@@ -103,8 +103,11 @@ class ClientTest: XCTestCase {
         }
     
     func testGetBlock() {
-        var res = GetBlock(client: client, blockNum: 3584405)
-        print (res)
+//        var res = GetBlock(client: client, blockNum: 3584405)
+//        print (res)
+        
+//        var res = GetAccounts(client: client, account: "beowulf")
+//        print (res)
 //        let test = expectation(description: "Response")
 //        let req = API.GetBlock(blockNum: 3584405)
 //        do{
@@ -138,8 +141,7 @@ class ClientTest: XCTestCase {
         }
     
     func testBroadcast() {
-        
-//        ImportKey(wif: "5JEsAzMxv5E1djK7EGzeBCG85EeHf798UJbEYfSKihM1vTVVwQc", name: "initminer")
+        ImportKey(wif: "5JEsAzMxv5E1djK7EGzeBCG85EeHf798UJbEYfSKihM1vTVVwQc", name: "initminer")
 //        let wl = GenKeys(newAccountName: "test")
 //        SaveWalletFile(walletPath: "wallet", walletFilename: "", password: "12345678", walletData: wl)
         SetKeysFromFileWallet(pathFileWallet: "wallet/test-wallet.json", password: "12345678")
@@ -148,7 +150,7 @@ class ClientTest: XCTestCase {
     }
 
     func testGetAccount() throws {
-        let test = expectation(description: "Response")
+//        let test = expectation(description: "Response")
         let req = API.GetAccounts(names: ["beowulf"])
         do{
             let res = try client.sendSynchronous(req)

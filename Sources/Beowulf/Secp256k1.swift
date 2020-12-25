@@ -3,15 +3,15 @@
 import Foundation
 import secp256k1
 
-internal class Secp256k1Context {
-    struct Flags: OptionSet {
+public class Secp256k1Context {
+    public struct Flags: OptionSet {
         let rawValue: Int32
         static let none = Flags(rawValue: SECP256K1_CONTEXT_NONE)
         static let sign = Flags(rawValue: SECP256K1_CONTEXT_SIGN)
         static let verify = Flags(rawValue: SECP256K1_CONTEXT_VERIFY)
     }
 
-    enum Error: Swift.Error {
+    public enum Error: Swift.Error {
         /// The secret key is invalid or the nonce generation failed.
         case signingFailed
         /// Unable to parse compact signature
@@ -23,13 +23,13 @@ internal class Secp256k1Context {
     }
 
     /// Shared context.
-    static let shared = Secp256k1Context(flags: [.sign, .verify])
+    public static let shared = Secp256k1Context(flags: [.sign, .verify])
 
     private let ctx: OpaquePointer
 
     /// Create a new context.
     /// - Parameter flags: Flags used to initialize the context.
-    init(flags: Secp256k1Context.Flags = .none) {
+    public init(flags: Secp256k1Context.Flags = .none) {
         self.ctx = secp256k1_context_create(UInt32(flags.rawValue))
         let seed = Random.bytes(count: 32)
         _ = seed.withUnsafeBytes {
@@ -37,14 +37,14 @@ internal class Secp256k1Context {
         }
     }
 
-    deinit {
+    public deinit {
         secp256k1_context_destroy(self.ctx)
     }
 
     /// Verify a private key.
     /// - Parameter secretKey: 32-byte secret key to verify.
     /// - Returns: true if valid; false otherwise.
-    func verify(secretKey key: Data) -> Bool {
+    public func verify(secretKey key: Data) -> Bool {
         return key.withUnsafeBytes {
             secp256k1_ec_seckey_verify(self.ctx, $0) == 1
         }
@@ -54,7 +54,7 @@ internal class Secp256k1Context {
     /// - Parameter publicKey: Opaque data structure that holds a parsed and valid public key.
     /// - Parameter compressed: Whether to compress the key when serializing.
     /// - Returns: 33-byte or 65-byte public key.
-    func serialize(publicKey pubkey: UnsafePointer<secp256k1_pubkey>, compressed: Bool = true) -> Data {
+    public func serialize(publicKey pubkey: UnsafePointer<secp256k1_pubkey>, compressed: Bool = true) -> Data {
         var size: Int = compressed ? 33 : 65
         let flags = compressed ? SECP256K1_EC_COMPRESSED : SECP256K1_EC_UNCOMPRESSED
         var rv = Data(count: size)
@@ -67,7 +67,7 @@ internal class Secp256k1Context {
     /// Serialize a signature.
     /// - Parameter recoverableSignature: Opaque data structured that holds a parsed ECDSA signature, supporting pubkey recovery.
     /// - Returns: 64-byte signature and recovery id.
-    func serialize(recoverableSignature sig: UnsafePointer<secp256k1_ecdsa_recoverable_signature>) -> (Data, Int32) {
+    public func serialize(recoverableSignature sig: UnsafePointer<secp256k1_ecdsa_recoverable_signature>) -> (Data, Int32) {
         var signature = Data(count: 64)
         var recid: Int32 = -1
         _ = signature.withUnsafeMutableBytes {
@@ -79,7 +79,7 @@ internal class Secp256k1Context {
     /// Compute the public key for a secret key.
     /// - Parameter fromSecret: 32-byte secret key.
     /// - Returns: 33-byte compressed public key.
-    func createPublic(fromSecret key: Data) throws -> Data {
+    public func createPublic(fromSecret key: Data) throws -> Data {
         let pubkey = UnsafeMutablePointer<secp256k1_pubkey>.allocate(capacity: 1)
         defer { pubkey.deallocate() }
         let success = key.withUnsafeBytes {
@@ -96,7 +96,7 @@ internal class Secp256k1Context {
     /// - Parameter secretKey: 32-byte secret key to sign message with.
     /// - Parameter ndata: 32-bytes of rfc6979 "Additional data", optional.
     /// - Returns: 64-byte signature and recovery id.
-    func sign(message: Data, secretKey key: Data, ndata: Data? = nil) throws -> (Data, Int32) {
+    public func sign(message: Data, secretKey key: Data, ndata: Data? = nil) throws -> (Data, Int32) {
         let sig = UnsafeMutablePointer<secp256k1_ecdsa_recoverable_signature>.allocate(capacity: 1)
         defer { sig.deallocate() }
         let success = message.withUnsafeBytes { (msgPtr: UnsafePointer<UInt8>) -> Bool in
@@ -121,7 +121,7 @@ internal class Secp256k1Context {
     /// - Parameter signature: 64-byte signature.
     /// - Parameter recoveryId: The recovery id (0, 1, 2 or 3)
     /// - Returns: 33-byte compressed public key.
-    func recover(message: Data, signature: Data, recoveryId recid: Int32) throws -> Data {
+    public func recover(message: Data, signature: Data, recoveryId recid: Int32) throws -> Data {
         let sig = UnsafeMutablePointer<secp256k1_ecdsa_recoverable_signature>.allocate(capacity: 1)
         defer { sig.deallocate() }
         let parseSuccess = signature.withUnsafeBytes {

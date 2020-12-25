@@ -8,7 +8,7 @@ public struct ExtensionJsonType: Codable {
     public init?(){
         self.data = ""
     }
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case data = "data"
     }
 }
@@ -20,7 +20,7 @@ public struct ExtensionType: Codable{
         self.type = 1
         self.value = ExtensionJsonType()
     }
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case type = "type"
         case value = "value"
     }
@@ -89,7 +89,7 @@ public init(refBlockNum: UInt16, refBlockPrefix: UInt32, expiration: Date, creat
     }
 }
 
-extension Transaction: Equatable {
+public extension Transaction: Equatable {
     public static func == (lhs: Transaction, rhs: Transaction) -> Bool {
         return (try? lhs.digest()) == (try? rhs.digest())
     }
@@ -195,14 +195,14 @@ public struct TransactionResponse: _Transaction {
     }
 }
 
-extension TransactionResponse: Equatable {
+public extension TransactionResponse: Equatable {
     public static func == (lhs: TransactionResponse, rhs: TransactionResponse) -> Bool {
         return (try? lhs.digest()) == (try? rhs.digest())
     }
 }
 
 // Codable conformance.
-extension TransactionResponse {
+public extension TransactionResponse {
     fileprivate enum Key: CodingKey {
         case refBlockNum
         case refBlockPrefix
@@ -248,7 +248,7 @@ extension TransactionResponse {
     }
 }
 
-extension Transaction {
+public extension Transaction {
     fileprivate enum Key: CodingKey {
         case refBlockNum
         case refBlockPrefix
@@ -280,7 +280,7 @@ extension Transaction {
     }
 }
 
-extension SignedTransaction {
+public extension SignedTransaction {
     private enum Key: CodingKey {
         case signatures
     }
@@ -300,7 +300,7 @@ extension SignedTransaction {
 
 // Workaround for: Swift runtime does not yet support dynamically querying conditional conformance.
 #if !swift(>=4.2)
-    extension Transaction {
+    public extension Transaction {
         public func binaryEncode(to encoder: BeowulfEncoder) throws {
             try encoder.encode(self.refBlockNum)
             try encoder.encode(self.refBlockPrefix)

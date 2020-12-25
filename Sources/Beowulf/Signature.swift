@@ -7,7 +7,7 @@ public struct Signature: Equatable, LosslessStringConvertible {
     private let signature: Data
     private let recoveryId: Int32
 
-    internal init(signature: Data, recoveryId: Int32) {
+    public init(signature: Data, recoveryId: Int32) {
         self.signature = signature
         self.recoveryId = recoveryId
     }
@@ -49,7 +49,7 @@ public struct Signature: Equatable, LosslessStringConvertible {
 }
 
 // Codable conformance.
-extension Signature: Codable {
+public extension Signature: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         guard let signature = Signature(try container.decode(String.self)) else {

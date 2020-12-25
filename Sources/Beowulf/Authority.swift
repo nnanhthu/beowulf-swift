@@ -21,14 +21,14 @@ public struct Authority: BeowulfCodable, Equatable {
     public var keyAuths: [Auth<PublicKey>]
 }
 
-extension Authority.Auth {
+public extension Authority.Auth {
     public init(_ value: T, weight: UInt16 = 1) {
         self.value = value
         self.weight = weight
     }
 }
 
-extension Authority.Auth: BeowulfCodable {
+public extension Authority.Auth: BeowulfCodable {
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         self.value = try container.decode(T.self)
@@ -42,7 +42,7 @@ extension Authority.Auth: BeowulfCodable {
     }
 }
 
-extension Authority.Auth: ExpressibleByDictionaryLiteral {
+public extension Authority.Auth: ExpressibleByDictionaryLiteral {
     public typealias Key = T
     public typealias Value = UInt16
     public init(dictionaryLiteral elements: (T, UInt16)...) {

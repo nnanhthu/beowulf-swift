@@ -64,7 +64,7 @@ public struct Asset: Equatable {
     /// The asset symbol.
     public let symbol: Symbol
 
-    internal let amount: Int64
+    public let amount: Int64
 
     /// Create a new `Asset`.
     /// - Parameter value: Amount of tokens.
@@ -104,7 +104,7 @@ public struct Asset: Equatable {
     }
 }
 
-extension Asset: LosslessStringConvertible {
+public extension Asset: LosslessStringConvertible {
     public var description: String {
         let value = Double(self.amount) / pow(10, Double(self.symbol.decimals))
         let formatter = NumberFormatter()
@@ -118,7 +118,7 @@ extension Asset: LosslessStringConvertible {
     }
 }
 
-extension Asset: BeowulfEncodable, Decodable {
+public extension Asset: BeowulfEncodable, Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let value = try container.decode(String.self)

@@ -43,7 +43,7 @@ public struct Wallet: Codable {
         self.salt = salt
         self.name = name
     }
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case cipherKeys = "cipherKeys"
         case cipherType = "cipherType"
         case salt = "salt"
@@ -58,13 +58,13 @@ public struct PlainKeys: Codable {
         self.checksum = []
         self.keys = [:]
     }
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case checksum = "checksum"
         case keys = "keys"
     }
 }
 
-func RandStringBytes(length: Int) -> String{
+public func RandStringBytes(length: Int) -> String{
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+"
     return String((0..<length).map{ _ in letters.randomElement()! })
 }
@@ -91,7 +91,7 @@ func lock() -> String?{
     return nil
 }
 
-func Unlock(password: String) -> String?{
+public func Unlock(password: String) -> String?{
     if password.count == 0{
         return "Password must be not empty"
     }
@@ -137,7 +137,7 @@ func Unlock(password: String) -> String?{
     return nil
 }
 
-func SetPassword(password: String) -> String?{
+public func SetPassword(password: String) -> String?{
     if !isNew(){
         if isLocked() {
             return "The wallet must be unlocked before the password can be set"
@@ -234,7 +234,7 @@ func importKey(wif: String) -> Bool{
     return true
 }
 
-func ImportKey(wif: String, name: String) -> Bool{
+public func ImportKey(wif: String, name: String) -> Bool{
     if isLocked(){
         return false
     }
@@ -263,13 +263,13 @@ func encryptKeys(){
         
 }
 
-func CreatePrivateKey(user: String, role: String, password: String) -> PrivateKey?{
+public func CreatePrivateKey(user: String, role: String, password: String) -> PrivateKey?{
     let new_password = password + Wallet_!.salt
     let seed = user + role + new_password
     return PrivateKey(seed: seed)
 }
 
-func CreatePublicKey(privateKey: PrivateKey) -> PublicKey{
+public func CreatePublicKey(privateKey: PrivateKey) -> PublicKey{
     return privateKey.createPublic()
 }
 
@@ -397,7 +397,7 @@ func checkFileExisted(pathFile: String) -> String?{
         return "FILE PATH NOT AVAILABLE"
     }
 }
-func SetKeys(keys: [String:String]){
+public func SetKeys(keys: [String:String]){
     if keys.count > 0{
         CurrentKeys_.removeAll()
         for (_,v) in keys{
@@ -503,8 +503,8 @@ public func SetKeysFromFileWallet(pathFileWallet: String, password: String) -> S
     return "error"
 }
 
-extension Data {
-    func randomGenerateBytes(count: Int) -> Data? {
+public extension Data {
+    public func randomGenerateBytes(count: Int) -> Data? {
         let bytes = UnsafeMutableRawPointer.allocate(byteCount: count, alignment: 1)
         defer { bytes.deallocate() }
         let status = CCRandomGenerateBytes(bytes, count)
@@ -512,7 +512,7 @@ extension Data {
         return Data(bytes: bytes, count: count)
     }
     
-    func crypt(operation: Int, algorithm: Int, options: Int, key: Data,
+    public func crypt(operation: Int, algorithm: Int, options: Int, key: Data,
             initializationVector: Data, dataIn: Data) -> Data? {
         return key.withUnsafeBytes { keyUnsafeRawBufferPointer in
             return dataIn.withUnsafeBytes { dataInUnsafeRawBufferPointer in
@@ -541,7 +541,7 @@ extension Data {
     /// Key can be 128, 192, or 256 bits.
     /// Generates a fresh IV for you each time, and prefixes it to the
     /// returned ciphertext.
-    func encryptAES256_CBC_PKCS7_IV(key: Data) -> Data? {
+    public func encryptAES256_CBC_PKCS7_IV(key: Data) -> Data? {
         guard let iv = randomGenerateBytes(count: kCCBlockSizeAES128) else { return nil }
         // No option is needed for CBC, it is on by default.
         guard let ciphertext = crypt(operation: kCCEncrypt,
@@ -555,7 +555,7 @@ extension Data {
     
     /// Decrypts self, where self is the IV then the ciphertext.
     /// Key can be 128/192/256 bits.
-    func decryptAES256_CBC_PKCS7_IV(key: Data) -> Data? {
+    public func decryptAES256_CBC_PKCS7_IV(key: Data) -> Data? {
         guard count > kCCBlockSizeAES128 else { return nil }
         let iv = prefix(kCCBlockSizeAES128)
         let ciphertext = suffix(from: kCCBlockSizeAES128)

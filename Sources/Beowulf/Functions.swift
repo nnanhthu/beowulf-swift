@@ -38,6 +38,17 @@ public func GetTransaction(client: Beowulf.Client, trxId: String) -> Transaction
     return nil
 }
 
+//public func GetAccounts(client: Beowulf.Client, accounts: [String]) -> [ExtendedAccount]{
+//    let req = API.GetAccounts(names: accounts)
+//    do{
+//        let res = try client.sendSynchronous(req)
+//        return res
+//    }catch{
+//        
+//    }
+//    return nil
+//}
+
 func matchesRegex(regex: String, text: String) -> Bool {
     do {
         let regex = try NSRegularExpression(pattern: regex)
@@ -158,6 +169,33 @@ public func AccountCreate(client: Beowulf.Client, creator: String, newAccountNam
         return sendTrx(client: client, op: accountCreate, chain: chain)
     }
 }
+
+//public func AccountUpdate(client: Beowulf.Client, accountName: String, publicKey: String, fee: String, chain: ChainId) -> API.TransactionConfirmation? {
+//
+//    var err = ValidateNameAccount(account: accountName)
+//    if err != nil{
+//        return nil
+//    }else{
+//        let validate = ValidateFee(fee: fee, minFee: 1000)
+//        if validate == false{
+//            return nil
+//        }
+//        let pub = PublicKey(publicKey)!
+//        let keyAuth = Authority.Auth(pub, weight: 1)
+//        var keyAuths : [Authority.Auth<PublicKey>] = []
+//        keyAuths.append(keyAuth)
+//        let owner = Authority(weightThreshold: 1, accountAuths: [], keyAuths: keyAuths)
+//        let accountCreate = Operation.AccountCreate(
+//            fee: Asset(fee)!,
+//            creator: creator,
+//            newAccountName: newAccountName,
+//            owner: owner,
+//            jsonMetadata:""
+//        )
+//
+//        return sendTrx(client: client, op: accountCreate, chain: chain)
+//    }
+//}
 
 public func Transfer(client: Beowulf.Client, from: String, to: String, amount: String, fee: String, memo: String, chain: ChainId) -> API.TransactionConfirmation? {
 

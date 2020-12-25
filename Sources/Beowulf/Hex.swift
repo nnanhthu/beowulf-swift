@@ -2,8 +2,8 @@
 
 import Foundation
 
-internal extension Data {
-    init(hexEncoded string: String) {
+public extension Data {
+    public init(hexEncoded string: String) {
         let nibbles = string.unicodeScalars
             .map { $0.hexNibble }
             .filter { $0 != nil }
@@ -18,12 +18,12 @@ internal extension Data {
         self = Data(bytes: bytes)
     }
 
-    struct HexEncodingOptions: OptionSet {
+    public struct HexEncodingOptions: OptionSet {
         let rawValue: Int
         static let upperCase = HexEncodingOptions(rawValue: 1 << 0)
     }
 
-    func hexEncodedString(options: HexEncodingOptions = []) -> String {
+    public func hexEncodedString(options: HexEncodingOptions = []) -> String {
         let hexDigits = Array((options.contains(.upperCase) ? "0123456789ABCDEF" : "0123456789abcdef").utf16)
         var chars: [unichar] = []
         chars.reserveCapacity(2 * count)
@@ -35,8 +35,8 @@ internal extension Data {
     }
 }
 
-internal extension UnicodeScalar {
-    var hexNibble: UInt8? {
+public extension UnicodeScalar {
+    public var hexNibble: UInt8? {
         let value = self.value
         if 48 <= value && value <= 57 {
             return UInt8(value - 48)

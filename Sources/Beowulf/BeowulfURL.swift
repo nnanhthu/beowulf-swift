@@ -38,7 +38,7 @@ public struct BeowulfURL {
     }
 
     /// Parses a beowulf signing url
-    static func parse(_ url: URLComponents) throws -> BeowulfURL {
+    public static func parse(_ url: URLComponents) throws -> BeowulfURL {
         guard url.scheme == "beowulf" else {
             throw Error.invalidScheme
         }
@@ -305,7 +305,7 @@ public struct BeowulfURL {
     }
 }
 
-extension BeowulfURL: CustomStringConvertible {
+public extension BeowulfURL: CustomStringConvertible {
     public var description: String {
         guard let url = self.url else {
             return "Invalid BeowulfURL"
@@ -314,7 +314,7 @@ extension BeowulfURL: CustomStringConvertible {
     }
 }
 
-extension BeowulfURL: Equatable {
+public extension BeowulfURL: Equatable {
     public static func == (lhs: BeowulfURL, rhs: BeowulfURL) -> Bool {
         return lhs.url == rhs.url
     }
@@ -337,8 +337,8 @@ fileprivate func decodeObject<T: Decodable>(_ type: T.Type, from object: Any) th
 
 // Base64u encoding & decoding
 
-extension Data {
-    init?(base64uEncoded base64uString: String) {
+public extension Data {
+    public init?(base64uEncoded base64uString: String) {
         let base64String = base64uString
             .replacingOccurrences(of: "_", with: "/")
             .replacingOccurrences(of: "-", with: "+")
@@ -349,7 +349,7 @@ extension Data {
         self = data
     }
 
-    func base64uEncodedString() -> String {
+    public func base64uEncodedString() -> String {
         let base64 = self.base64EncodedString()
         return base64
             .replacingOccurrences(of: "/", with: "_")

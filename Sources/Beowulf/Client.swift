@@ -26,13 +26,13 @@ public protocol Request {
     /// Request parameter type.
     associatedtype Params: Encodable
     /// JSON-RPC 2.0 method to call.
-    var method: String { get }
+    public var method: String { get }
     /// JSON-RPC 2.0 parameters
-    var params: Params? { get }
+    public var params: Params? { get }
 }
 
 // Default implementation sends a request without params.
-extension Request {
+public extension Request {
     public var params: RequestParams<AnyEncodable>? {
         return nil
     }
@@ -54,15 +54,15 @@ public struct RequestParams<T: Encodable> {
     }
 }
 
-extension RequestParams: Encodable {
-    private struct Key: CodingKey {
+public extension RequestParams: Encodable {
+    public struct Key: CodingKey {
         var stringValue: String
-        init?(stringValue: String) {
+        public init?(stringValue: String) {
             self.stringValue = stringValue
         }
 
         var intValue: Int?
-        init?(intValue: Int) {
+        public init?(intValue: Int) {
             self.intValue = intValue
             self.stringValue = "\(intValue)"
         }
@@ -82,12 +82,12 @@ extension RequestParams: Encodable {
 }
 
 /// JSON-RPC 2.0 request payload wrapper.
-internal struct RequestPayload<Request: Beowulf.Request> {
-    let request: Request
-    let id: Int
+public struct RequestPayload<Request: Beowulf.Request> {
+    public let request: Request
+    public let id: Int
 }
 
-extension RequestPayload: Encodable {
+public extension RequestPayload: Encodable {
     fileprivate enum Keys: CodingKey {
         case id
         case jsonrpc
@@ -95,7 +95,7 @@ extension RequestPayload: Encodable {
         case params
     }
 
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: Keys.self)
         try container.encode(self.id, forKey: .id)
         try container.encode("2.0", forKey: .jsonrpc)
@@ -105,21 +105,21 @@ extension RequestPayload: Encodable {
 }
 
 /// JSON-RPC 2.0 response error type.
-internal struct ResponseError: Decodable {
-    let code: Int
-    let message: String
-    let data: [String: AnyDecodable]?
-    var resolvedData: [String: Any]? {
+public struct ResponseError: Decodable {
+    public let code: Int
+    public let message: String
+    public let data: [String: AnyDecodable]?
+    public var resolvedData: [String: Any]? {
         return self.data?.mapValues { $0.value as Any }
     }
 }
 
 /// JSON-RPC 2.0 response payload wrapper.
-internal struct ResponsePayload<T: Request>: Decodable {
+public struct ResponsePayload<T: Request>: Decodable {
 //    let jsonrpc: String
-    let result: T.Response?
-    let id: Int?
-    let error: ResponseError?
+    public let result: T.Response?
+    public let id: Int?
+    public let error: ResponseError?
 }
 
 /// URLSession adapter, for testability.
@@ -198,7 +198,7 @@ public class Client {
     }
 
     /// Return a URLRequest for a JSON-RPC 2.0 request payload.
-    internal func urlRequest<T: Request>(for payload: RequestPayload<T>) throws -> URLRequest {
+    public func urlRequest<T: Request>(for payload: RequestPayload<T>) throws -> URLRequest {
         let encoder = Client.JSONEncoder()
         var urlRequest = URLRequest(url: self.address)
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -209,7 +209,7 @@ public class Client {
     }
 
     /// Resolve a URLSession dataTask to a `Response`.
-    internal func resolveResponse<T: Request>(for payload: RequestPayload<T>, data: Data?, response: URLResponse?) throws -> T.Response? {
+    public func resolveResponse<T: Request>(for payload: RequestPayload<T>, data: Data?, response: URLResponse?) throws -> T.Response? {
         guard let response = response else {
             throw Error.networkError(message: "No response from server", error: nil)
         }
@@ -286,9 +286,9 @@ public class Client {
 }
 
 /// JSON Coding helpers.
-extension Client {
+public extension Client {
     /// Beowulf-style date formatter (ISO 8601 minus Z at the end).
-    static let dateFormatter: DateFormatter = {
+    public static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .iso8601)
         formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -297,17 +297,17 @@ extension Client {
         return formatter
     }()
 
-    static let dateEncoder = Foundation.JSONEncoder.DateEncodingStrategy.custom { (date, encoder) throws in
+    public static let dateEncoder = Foundation.JSONEncoder.DateEncodingStrategy.custom { (date, encoder) throws in
         var container = encoder.singleValueContainer()
         try container.encode(dateFormatter.string(from: date))
     }
 
-    static let dataEncoder = Foundation.JSONEncoder.DataEncodingStrategy.custom { (data, encoder) throws in
+    public static let dataEncoder = Foundation.JSONEncoder.DataEncodingStrategy.custom { (data, encoder) throws in
         var container = encoder.singleValueContainer()
         try container.encode(data.hexEncodedString())
     }
 
-    static let dateDecoder = Foundation.JSONDecoder.DateDecodingStrategy.custom { (decoder) -> Date in
+    public static let dateDecoder = Foundation.JSONDecoder.DateDecodingStrategy.custom { (decoder) -> Date in
         let container = try decoder.singleValueContainer()
         guard let date = dateFormatter.date(from: try container.decode(String.self)) else {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date")
@@ -315,7 +315,7 @@ extension Client {
         return date
     }
 
-    static let dataDecoder = Foundation.JSONDecoder.DataDecodingStrategy.custom { (decoder) -> Data in
+    public static let dataDecoder = Foundation.JSONDecoder.DataDecodingStrategy.custom { (decoder) -> Data in
         let container = try decoder.singleValueContainer()
         return Data(hexEncoded: try container.decode(String.self))
     }

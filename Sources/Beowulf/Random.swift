@@ -9,10 +9,10 @@ import Foundation
 #endif
 
 /// A cryptographically secure number random generator.
-internal struct Random {
+public struct Random {
     /// Get random bytes.
     /// - Parameter count: How many bytes to generate.
-    static func bytes(count: Int) -> Data {
+    public static func bytes(count: Int) -> Data {
         var rv = Data(count: count)
         #if os(Linux)
             guard let file = fopen("/dev/urandom", "r") else {

@@ -76,7 +76,7 @@ public struct PrivateKey: Equatable {
     }
 }
 
-extension PrivateKey: LosslessStringConvertible {
+public extension PrivateKey: LosslessStringConvertible {
     public var description: String {
         return self.wif
     }

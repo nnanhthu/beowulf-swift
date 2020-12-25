@@ -193,7 +193,7 @@ fileprivate enum OperationId: UInt8, BeowulfEncodable, Decodable {
 }
 
 /// A type-erased Beowulf operation.
-internal struct AnyOperation: BeowulfEncodable, Decodable {
+public struct AnyOperation: BeowulfEncodable, Decodable {
     public let operation: OperationType
 
     /// Create a new operation wrapper.

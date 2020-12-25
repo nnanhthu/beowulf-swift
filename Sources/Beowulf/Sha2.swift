@@ -3,9 +3,9 @@
 import Crypto
 import Foundation
 
-internal extension Data {
+public extension Data {
     /// Return a SHA2-256 hash of the data.
-    func sha256Digest() -> Data {
+    public func sha256Digest() -> Data {
         let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: 32)
         self.withUnsafeBytes {
             hasher_Raw(HASHER_SHA2, $0, self.count, buf)
