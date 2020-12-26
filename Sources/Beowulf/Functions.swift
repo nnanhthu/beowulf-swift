@@ -38,16 +38,16 @@ public func GetTransaction(client: Beowulf.Client, trxId: String) -> Transaction
     return nil
 }
 
-//public func GetAccounts(client: Beowulf.Client, accounts: [String]) -> [ExtendedAccount]{
-//    let req = API.GetAccounts(names: accounts)
-//    do{
-//        let res = try client.sendSynchronous(req)
-//        return res
-//    }catch{
-//        
-//    }
-//    return nil
-//}
+public func GetAccounts(client: Beowulf.Client, accounts: [String]) -> [ExtendedAccount]?{
+    let req = API.GetAccounts(names: accounts)
+    do{
+        let res = try client.sendSynchronous(req)
+        return res
+    }catch{
+        
+    }
+    return nil
+}
 
 func matchesRegex(regex: String, text: String) -> Bool {
     do {

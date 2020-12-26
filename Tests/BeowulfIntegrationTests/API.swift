@@ -151,13 +151,15 @@ class ClientTest: XCTestCase {
 
     func testGetAccount() throws {
 //        let test = expectation(description: "Response")
-        let req = API.GetAccounts(names: ["beowulf"])
-        do{
-            let res = try client.sendSynchronous(req)
-            print(res)
-        }catch{
-            
-        }
+//        let req = API.GetAccounts(names: ["beowulf"])
+//        do{
+//            let res = try client.sendSynchronous(req)
+//            print(res)
+//        }catch{
+//            
+//        }
+        let acc = GetAccounts(client: client, accounts: ["beowulf"])
+        print(acc)
 //        let result = try client.sendSynchronous(API.GetAccounts(names: ["almost-digital"]))
 //        guard let account = result?.first else {
 //            XCTFail("No account returned")
@@ -172,7 +174,7 @@ class ClientTest: XCTestCase {
 //        var str = ValidateNameAccount(account: "aaa-4")
 //        var valid = ValidateFee(fee: "0.01000 W", minFee: 1000)
 //        var str = RandStringBytes(length: 10)
-        var wallet = GenKeys(newAccountName: "acc2")
+//        var wallet = GenKeys(newAccountName: "acc2")
         var keys : [String:String] = [:]
         keys["BEO57qTuXxtnc7KDJ4t5zSoJimzpR2SgV9SQDsu5q4NMSkKLUwsA6"] =
             "5JHTf7dkpVxQNcb5NWc7URTrHDgAFEyxn2BEnMjuJ6fJrCAniCQ"
@@ -180,7 +182,10 @@ class ClientTest: XCTestCase {
         SetKeys(keys: keys)
 //        var trx = AccountCreate(client: client, creator: "beowulf", newAccountName: "acc2", publicKey: wallet!.publicKey, fee: "0.10000 W", chain: .testNet)
         
-        let trx = Transfer(client: client, from: "beowulf", to: "acc1", amount: "0.01000 W", fee: "0.01000 W", memo: "", chain: .testNet)
-        print (trx)
+//        var trx = Transfer(client: client, from: "beowulf", to: "thaiw1", amount: "100.00000 BWF", fee: "0.01000 W", memo: "", chain: .testNet)
+//        trx = Transfer(client: client, from: "beowulf", to: "thaiw1", amount: "100.00000 W", fee: "0.01000 W", memo: "", chain: .testNet)
+        
+        let trans = GetTransaction(client: client, trxId: "d1740273eef7790f345c70d109709072f050d818")
+        print (trans)
     }
 }

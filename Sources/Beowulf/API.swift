@@ -46,6 +46,7 @@ public struct API {
         public let lastIrreversibleBlockNum: UInt32
         
     }
+    
 
     public struct GetDynamicGlobalProperties: Request {
         public typealias Response = DynamicGlobalProperties
@@ -108,41 +109,7 @@ public struct API {
             self.params = RequestParams([blockNum])
         }
     }
-
-
-    public struct Share: Decodable {
-        public let value: Int64
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            if let intValue = try? container.decode(Int64.self) {
-                self.value = intValue
-            } else {
-                self.value = Int64(try container.decode(String.self)) ?? 0
-            }
-        }
-    }
-
-    /// The "extended" account object returned by get_accounts.
-    public struct ExtendedAccount: Decodable {
-        public let id: UInt16
-        public let name: String
-        public let owner: Authority
-        public let jsonMetadata: String
-        public let lastOwnerUpdate: Date
-        public let created: Date
-        public let balance: Asset
-        public let wdBalance: Asset
-        public let vestingShares: Asset
-        public let vestingWithdrawRate: Asset
-        public let nextVestingWithdrawal: Date
-        public let withdrawn: Share
-        public let toWithdraw: Share
-        public let supernodesVotedFor: UInt16
-        public let tokenList: [String]
-        public let vestingBalance: Asset
-        public let supernodeVotes: [String]
-    }
-
+    
     /// Fetch accounts.
     public struct GetAccounts: Request {
         public typealias Response = [ExtendedAccount]
