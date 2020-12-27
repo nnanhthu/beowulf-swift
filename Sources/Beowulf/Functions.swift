@@ -49,16 +49,16 @@ public func GetAccounts(client: Beowulf.Client, accounts: [String]) -> [Extended
     return nil
 }
 
-//public func GetAccounts(client: Beowulf.Client, accounts: [String]) -> [ExtendedAccount]?{
-//    let req = API.GetAccounts(names: accounts)
-//    do{
-//        let res = try client.sendSynchronous(req)
-//        return res
-//    }catch{
-//        
-//    }
-//    return nil
-//}
+public func GetBalance(client: Beowulf.Client, account: String, tokenName: String, decimals: UInt8) -> String?{
+    let req = API.GetBalance(account: account, tokenName: tokenName, decimals: decimals)
+    do{
+        let res = try client.sendSynchronous(req)
+        return res
+    }catch{
+
+    }
+    return nil
+}
 
 func matchesRegex(regex: String, text: String) -> Bool {
     do {

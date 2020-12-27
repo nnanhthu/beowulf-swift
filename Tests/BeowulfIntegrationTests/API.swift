@@ -156,10 +156,11 @@ class ClientTest: XCTestCase {
 //            let res = try client.sendSynchronous(req)
 //            print(res)
 //        }catch{
-//            
+//
 //        }
-        let acc = GetAccounts(client: client, accounts: ["beowulf"])
-        print(acc)
+//        let acc = GetAccounts(client: client, accounts: ["beowulf"])
+        let balance = GetBalance(client: client, account: "beowulf", tokenName: "W", decimals: 5)
+        print(balance)
 //        let result = try client.sendSynchronous(API.GetAccounts(names: ["almost-digital"]))
 //        guard let account = result?.first else {
 //            XCTFail("No account returned")
