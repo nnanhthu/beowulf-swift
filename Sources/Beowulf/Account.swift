@@ -21,7 +21,7 @@ public struct Share: Decodable {
 
 /// The "extended" account object returned by get_accounts.
 public struct ExtendedAccount: Decodable {
-    public let id: UInt16
+    public let id: UInt64
     public let name: String
     public let owner: Authority
     public let jsonMetadata: String
@@ -65,7 +65,7 @@ public extension ExtendedAccount {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: Key.self)
-        self.id = try container.decode(UInt16.self, forKey: .id)
+        self.id = try container.decode(UInt64.self, forKey: .id)
         self.name = try container.decode(String.self, forKey: .name)
         self.owner = try container.decode(Authority.self, forKey: .owner)
         self.jsonMetadata = try container.decode(String.self, forKey: .jsonMetadata)

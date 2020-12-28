@@ -141,8 +141,8 @@ class ClientTest: XCTestCase {
         }
     
     func testBroadcast() {
-        SetPassword(password: "123")
-        Unlock(password: "123")
+//        SetPassword(password: "123")
+//        Unlock(password: "123")
         let pub = ImportKey(wif: "5JHTf7dkpVxQNcb5NWc7URTrHDgAFEyxn2BEnMjuJ6fJrCAniCQ", name: "beowulf")
 //        let wl = GenKeys(newAccountName: "test")
 //        SaveWalletFile(walletPath: "wallet", walletFilename: "", password: "12345678", walletData: wl)
@@ -160,9 +160,9 @@ class ClientTest: XCTestCase {
 //        }catch{
 //
 //        }
-//        let acc = GetAccounts(client: client, accounts: ["beowulf"])
-        let balance = GetBalance(client: client, account: "beowulf", tokenName: "W", decimals: 5)
-        print(balance)
+        let acc = GetAccounts(client: client, accounts: ["thaiw1"])
+//        let balance = GetBalance(client: client, account: "beowulf", tokenName: "W", decimals: 5)
+        print(acc)
 //        let result = try client.sendSynchronous(API.GetAccounts(names: ["almost-digital"]))
 //        guard let account = result?.first else {
 //            XCTFail("No account returned")
