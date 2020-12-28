@@ -70,7 +70,10 @@ public func RandStringBytes(length: Int) -> String{
 }
 
 func isNew() -> Bool{
-    return Wallet_?.cipherKeys?.count == 0
+    if Wallet_ == nil || Wallet_!.cipherKeys == nil || Wallet_!.cipherKeys!.count == 0{
+        return true
+    }
+    return false
 }
 
 func isLocked() -> Bool{
@@ -213,7 +216,8 @@ func LoadWallet(fileName: String = "wallet.json") -> Bool{
 func saveWallet(fileName: String = "wallet.json"){
     encryptKeys()
     //Convert to [byte]
-    let jsonData = try! JSONSerialization.data(withJSONObject: Wallet_!, options: .prettyPrinted)
+//    let jsonData = try! JSONSerialization.data(withJSONObject: Wallet_!, options: .prettyPrinted)
+    let jsonData = try! JSONEncoder().encode(Wallet_!)
     if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
 
     let fileURL = dir.appendingPathComponent(fileName)
@@ -226,26 +230,27 @@ func saveWallet(fileName: String = "wallet.json"){
     }
 }
 
-func importKey(wif: String) -> Bool{
+func importKey(wif: String) -> String {
     let privateKey = PrivateKey(wif)!
     let publicKey = CreatePublicKey(privateKey: privateKey)
     let pubKey = publicKey.address
     Keys_[pubKey] = wif
-    return true
+    return pubKey
 }
 
-public func ImportKey(wif: String, name: String) -> Bool{
+public func ImportKey(wif: String, name: String) -> String{
     if isLocked(){
-        return false
+        return ""
     }
     Wallet_?.name = name
-    if importKey(wif: wif){
+    let pubKey = importKey(wif: wif)
+    if pubKey.count > 0{
         saveWallet(fileName: name+".json")
         CurrentKeys_.removeAll()
         CurrentKeys_.append(wif)
-        return true
+        return pubKey
     }
-    return false
+    return ""
 }
 
 func encryptKeys(){

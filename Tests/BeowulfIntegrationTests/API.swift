@@ -141,7 +141,9 @@ class ClientTest: XCTestCase {
         }
     
     func testBroadcast() {
-        ImportKey(wif: "5JEsAzMxv5E1djK7EGzeBCG85EeHf798UJbEYfSKihM1vTVVwQc", name: "initminer")
+        SetPassword(password: "123")
+        Unlock(password: "123")
+        let pub = ImportKey(wif: "5JHTf7dkpVxQNcb5NWc7URTrHDgAFEyxn2BEnMjuJ6fJrCAniCQ", name: "beowulf")
 //        let wl = GenKeys(newAccountName: "test")
 //        SaveWalletFile(walletPath: "wallet", walletFilename: "", password: "12345678", walletData: wl)
         SetKeysFromFileWallet(pathFileWallet: "wallet/test-wallet.json", password: "12345678")
