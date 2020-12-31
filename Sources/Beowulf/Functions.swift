@@ -181,6 +181,56 @@ public func AccountCreate(client: Beowulf.Client, creator: String, newAccountNam
     }
 }
 
+public func CreateMultiSigAccount(client: Beowulf.Client, creator: String, newAccountName: String, fee: String, accounts: [String], keys: [String], threshold: UInt32, chain: ChainId) -> API.TransactionConfirmation? {
+    let err = ValidateNameAccount(account: newAccountName)
+    if err != nil {
+        return nil
+    }
+    let validate = ValidateFee(fee: fee, minFee: 10000)
+    if validate == false {
+        return nil
+    }
+    var accountOwners = accounts
+    var keyOwners = keys
+    
+    if keyOwners.count + accountOwners.count == 0 {
+        return nil //, errors.New("accountOwners + keyOwners is not empty")
+    }
+    if threshold == 0 || threshold > uint32(keyOwners.count + accountOwners.count) {
+        return nil //, errors.New("threshold is not valid")
+    }
+    //Sort owners
+    if accountOwners.count > 1 {
+        accountOwners.sort()
+    }
+    if keyOwners.count > 1 {
+        keyOwners.sort()
+    }
+    
+    var ownerAuths : [Authority.Auth<String>] = []
+    var keyAuths : [Authority.Auth<PublicKey>] = []
+    for accountOwner in accountOwners{
+        let ownerAuth = Authority.Auth(accountOwner, weight: 1)
+        ownerAuths.append(ownerAuth)
+    }
+    for publicKey in keyOwners{
+        let pub = PublicKey(publicKey)!
+        let keyAuth = Authority.Auth(pub, weight: 1)
+        keyAuths.append(keyAuth)
+    }
+    
+    let owner = Authority(weightThreshold: threshold, accountAuths: ownerAuths, keyAuths: keyAuths)
+    let accountCreate = Operation.AccountCreate(
+        fee: Asset(fee)!,
+        creator: creator,
+        newAccountName: newAccountName,
+        owner: owner,
+        jsonMetadata:""
+    )
+    
+    return sendTrx(client: client, op: accountCreate, chain: chain)
+}
+
 //public func AccountUpdate(client: Beowulf.Client, accountName: String, publicKey: String, fee: String, chain: ChainId) -> API.TransactionConfirmation? {
 //
 //    var err = ValidateNameAccount(account: accountName)

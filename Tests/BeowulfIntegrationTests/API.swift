@@ -160,8 +160,8 @@ class ClientTest: XCTestCase {
 //        }catch{
 //
 //        }
-        let acc = GetAccounts(client: client, accounts: ["thaiw1"])
-//        let balance = GetBalance(client: client, account: "beowulf", tokenName: "W", decimals: 5)
+        let acc = GetAccounts(client: client, accounts: ["acc123"])
+//        let balance = GetBalance(client: client, account: "thaiw1", tokenName: "W", decimals: 5)
         print(acc)
 //        let result = try client.sendSynchronous(API.GetAccounts(names: ["almost-digital"]))
 //        guard let account = result?.first else {
@@ -177,15 +177,16 @@ class ClientTest: XCTestCase {
 //        var str = ValidateNameAccount(account: "aaa-4")
 //        var valid = ValidateFee(fee: "0.01000 W", minFee: 1000)
 //        var str = RandStringBytes(length: 10)
-//        var wallet = GenKeys(newAccountName: "acc2")
+//        var wallet = GenKeys(newAccountName: "acc123")
         var keys : [String:String] = [:]
-        keys["BEO57qTuXxtnc7KDJ4t5zSoJimzpR2SgV9SQDsu5q4NMSkKLUwsA6"] =
-            "5JHTf7dkpVxQNcb5NWc7URTrHDgAFEyxn2BEnMjuJ6fJrCAniCQ"
-//        keys["BEO5r5ceRhRFe4j1BCpp4eKwLkB7MRo41yrGzpjHakTB4KDMicxnC"] = "5JrfnT23TfZSg6xHtBpsc7NRuGNakCiGUZ5WN1tNUJBVkWapYfb"
+//        keys["BEO57qTuXxtnc7KDJ4t5zSoJimzpR2SgV9SQDsu5q4NMSkKLUwsA6"] =
+//            "5JHTf7dkpVxQNcb5NWc7URTrHDgAFEyxn2BEnMjuJ6fJrCAniCQ"
+        keys["BEO8HWozPU4ai3p7w95VAKQJxBcTmXunQmAAnSwx3zFJBGRjc5Gdp"] = "5JanKynRyMKVs6ZBi7wScnk6HDBkncVzcooE2NzKARhHLWNvV8X"
         SetKeys(keys: keys)
-//        var trx = AccountCreate(client: client, creator: "beowulf", newAccountName: "acc2", publicKey: wallet!.publicKey, fee: "0.10000 W", chain: .testNet)
+//        var trx = CreateMultiSigAccount(client: client, creator: "beowulf", newAccountName: "acc123", fee: "0.10000 W", accounts: ["thaiw1"], keys: [wallet!.publicKey], threshold: 1, chain: .testNet)
         
-//        var trx = Transfer(client: client, from: "beowulf", to: "thaiw1", amount: "100.00000 BWF", fee: "0.01000 W", memo: "", chain: .testNet)
+        var trx = Transfer(client: client, from: "thaiw1", to: "acc123", amount: "0.01000 W", fee: "0.01000 W", memo: "", chain: .testNet)
+        trx = Transfer(client: client, from: "acc123", to: "thaiw1", amount: "10.00000 THAITEST", fee: "0.01000 W", memo: "", chain: .testNet)
 //        trx = Transfer(client: client, from: "beowulf", to: "thaiw1", amount: "100.00000 W", fee: "0.01000 W", memo: "", chain: .testNet)
         
         let trans = GetTransaction(client: client, trxId: "d1740273eef7790f345c70d109709072f050d818")
