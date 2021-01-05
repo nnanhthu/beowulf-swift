@@ -105,7 +105,7 @@ extension RequestPayload: Encodable {
 }
 
 /// JSON-RPC 2.0 response error type.
-public struct ResponseError: Decodable {
+public struct ResponseError: Swift.Error, Decodable {
     public let code: Int
     public let message: String
     public let data: [String: AnyDecodable]?

@@ -179,13 +179,13 @@ class ClientTest: XCTestCase {
 //        var str = RandStringBytes(length: 10)
 //        var wallet = GenKeys(newAccountName: "acc123")
         var keys : [String:String] = [:]
-//        keys["BEO57qTuXxtnc7KDJ4t5zSoJimzpR2SgV9SQDsu5q4NMSkKLUwsA6"] =
-//            "5JHTf7dkpVxQNcb5NWc7URTrHDgAFEyxn2BEnMjuJ6fJrCAniCQ"
-        keys["BEO8HWozPU4ai3p7w95VAKQJxBcTmXunQmAAnSwx3zFJBGRjc5Gdp"] = "5JanKynRyMKVs6ZBi7wScnk6HDBkncVzcooE2NzKARhHLWNvV8X"
+        keys["BEO57qTuXxtnc7KDJ4t5zSoJimzpR2SgV9SQDsu5q4NMSkKLUwsA6"] =
+            "5JHTf7dkpVxQNcb5NWc7URTrHDgAFEyxn2BEnMjuJ6fJrCAniCQ"
+//        keys["BEO8HWozPU4ai3p7w95VAKQJxBcTmXunQmAAnSwx3zFJBGRjc5Gdp"] = "5JanKynRyMKVs6ZBi7wScnk6HDBkncVzcooE2NzKARhHLWNvV8X"
         SetKeys(keys: keys)
-//        var trx = CreateMultiSigAccount(client: client, creator: "beowulf", newAccountName: "acc123", fee: "0.10000 W", accounts: ["thaiw1"], keys: [wallet!.publicKey], threshold: 1, chain: .testNet)
+        var trx = CreateMultiSigAccount(client: client, creator: "beowulf", newAccountName: "acc123", fee: "0.10000 W", accounts: ["thaiw1"], keys: [], threshold: 1, chain: .testNet)
         
-        var trx = Transfer(client: client, from: "acc123", to: "acc123", amount: "1.01000 BWF", fee: "0.01000 W", memo: "", chain: .testNet)
+//        var trx = Transfer(client: client, from: "acc123", to: "acc123", amount: "1.01000 BWF", fee: "0.01000 W", memo: "", chain: .testNet)
 //        trx = Transfer(client: client, from: "acc123", to: "thaiw1", amount: "10.00000 THAITEST", fee: "0.01000 W", memo: "", chain: .testNet)
 //        trx = Transfer(client: client, from: "beowulf", to: "thaiw1", amount: "100.00000 W", fee: "0.01000 W", memo: "", chain: .testNet)
         

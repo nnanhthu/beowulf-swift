@@ -16,6 +16,14 @@ var Locked = true
 var WalletName_ = "wallet.json"
 var CurrentKeys_ : [String] = []
 
+public enum Er: Int {
+    case invalidAccountName
+    case invalidFee
+    case invalidAmount
+    case invalidThreshold
+    case invalidMultisig
+}
+
 public func GetBlock(client: Beowulf.Client, blockNum: Int) -> SignedBlock?{
     let req = API.GetBlock(blockNum: blockNum)
     do{
@@ -84,41 +92,41 @@ func matchesRegex(regex: String, text: String) -> Bool {
 
 
 func ValidateNameAccount(account: String) -> String?{
-    return nil
-//    if account.isEmpty{
-//        return "Name account is not empty"
-//    }else if account.count < 3 || account.count > 16{
-//        return "Name length is from 3 to 16 characters"
-//    }
-//    let matching = matchesRegex(regex: "[a-z0-9-]", text: account)
-//    if matching{
-//        return nil
-//    }
-//    return "Name contains character invalid"
+//    return nil
+    if account.isEmpty{
+        return "Name account is not empty"
+    }else if account.count < 3 || account.count > 16{
+        return "Name length is from 3 to 16 characters"
+    }
+    let matching = matchesRegex(regex: "[a-z0-9-]", text: account)
+    if matching{
+        return nil
+    }
+    return "Name contains character invalid"
 }
 
 func ValidateFee(fee:String, minFee:Int64) -> Bool{
-//    let asset = Asset(fee)
-//    if asset == nil{
-//        return false
-//    }
-//    if asset?.symbol.name != "W"{
-//        return false
-//    }
-//    if asset!.amount < minFee{
-//        return false
-//    }
+    let asset = Asset(fee)
+    if asset == nil{
+        return false
+    }
+    if asset?.symbol.name != "W"{
+        return false
+    }
+    if asset!.amount < minFee{
+        return false
+    }
     return true
 }
 
 func ValidateAmount(amount:String) -> Bool{
-//    let asset = Asset(amount)
-//    if asset == nil{
-//        return false
-//    }
-//    if asset!.amount <= 0{
-//        return false
-//    }
+    let asset = Asset(amount)
+    if asset == nil{
+        return false
+    }
+    if asset!.amount <= 0{
+        return false
+    }
     return true
 }
 
@@ -162,13 +170,13 @@ func sendTrx(client: Beowulf.Client, op: OperationType, chain: ChainId) -> (API.
 
 public func AccountCreate(client: Beowulf.Client, creator: String, newAccountName: String, publicKey: String, fee: String, chain: ChainId) -> (API.TransactionConfirmation?, Swift.Error?) {
 
-    var err = ValidateNameAccount(account: newAccountName)
+    let err = ValidateNameAccount(account: newAccountName)
     if err != nil{
-        return (nil,nil)
+        return (nil, ResponseError.init(code: Er.invalidAccountName.rawValue, message: err!, data: nil))
     }else{
         let validate = ValidateFee(fee: fee, minFee: 10000)
         if validate == false{
-            return (nil,nil)
+            return (nil, ResponseError.init(code: Er.invalidFee.rawValue, message: "Invalid Fee", data: nil))
         }
         let pub = PublicKey(publicKey)!
         let keyAuth = Authority.Auth(pub, weight: 1)
@@ -190,20 +198,20 @@ public func AccountCreate(client: Beowulf.Client, creator: String, newAccountNam
 public func CreateMultiSigAccount(client: Beowulf.Client, creator: String, newAccountName: String, fee: String, accounts: [String], keys: [String], threshold: UInt32, chain: ChainId) -> (API.TransactionConfirmation?, Swift.Error?) {
     let err = ValidateNameAccount(account: newAccountName)
     if err != nil {
-        return (nil,nil)
+        return (nil, ResponseError.init(code: Er.invalidAccountName.rawValue, message: err!, data: nil))
     }
     let validate = ValidateFee(fee: fee, minFee: 10000)
     if validate == false {
-        return (nil,nil)
+        return (nil,ResponseError.init(code: Er.invalidFee.rawValue, message: "Invalid Fee", data: nil))
     }
     var accountOwners = accounts
     var keyOwners = keys
     
     if keyOwners.count + accountOwners.count == 0 {
-        return (nil,nil) //, errors.New("accountOwners + keyOwners is not empty")
+        return (nil, ResponseError.init(code: Er.invalidMultisig.rawValue, message: "There are no keys for multisig", data: nil)) //, errors.New("accountOwners + keyOwners is not empty")
     }
     if threshold == 0 || threshold > UInt32(keyOwners.count + accountOwners.count) {
-        return nil //, errors.New("threshold is not valid")
+        return (nil, ResponseError.init(code: Er.invalidThreshold.rawValue, message: "Invalid Threshold", data: nil)) //, errors.New("threshold is not valid")
     }
     //Sort owners
     if accountOwners.count > 1 {
@@ -266,13 +274,13 @@ public func CreateMultiSigAccount(client: Beowulf.Client, creator: String, newAc
 
 public func Transfer(client: Beowulf.Client, from: String, to: String, amount: String, fee: String, memo: String, chain: ChainId) -> (API.TransactionConfirmation?, Swift.Error?) {
 
-    var valid = ValidateAmount(amount: amount)
+    let valid = ValidateAmount(amount: amount)
     if valid == false{
-        return (nil,nil)
+        return (nil, ResponseError.init(code: Er.invalidAmount.rawValue, message: "Invalid Amount", data: nil))
     }else{
         let validate = ValidateFee(fee: fee, minFee: 1000)
         if validate == false{
-            return (nil,nil)
+            return (nil, ResponseError.init(code: Er.invalidFee.rawValue, message: "Invalid Fee", data: nil))
         }
         
         let transferOp = Operation.Transfer(
