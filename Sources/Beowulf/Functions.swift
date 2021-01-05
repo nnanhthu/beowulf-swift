@@ -202,8 +202,8 @@ public func CreateMultiSigAccount(client: Beowulf.Client, creator: String, newAc
     if keyOwners.count + accountOwners.count == 0 {
         return (nil,nil) //, errors.New("accountOwners + keyOwners is not empty")
     }
-    if threshold == 0 || threshold > uint32(keyOwners.count + accountOwners.count) {
-        return (nil,nil) //, errors.New("threshold is not valid")
+    if threshold == 0 || threshold > UInt32(keyOwners.count + accountOwners.count) {
+        return nil //, errors.New("threshold is not valid")
     }
     //Sort owners
     if accountOwners.count > 1 {

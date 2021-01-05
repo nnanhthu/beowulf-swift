@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "AnyCodable",
+        "repositoryURL": "https://github.com/Flight-School/AnyCodable.git",
+        "state": {
+          "branch": null,
+          "revision": "396ccc3dba5bdee04c1e742e7fab40582861401e",
+          "version": null
+        }
+      },
+      {
+        "package": "OrderedDictionary",
+        "repositoryURL": "https://github.com/jnordberg/OrderedDictionary.git",
+        "state": {
+          "branch": "swiftpm",
+          "revision": "e59b03776804b99a5e17469f98752673e46d781e",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
