@@ -209,7 +209,7 @@ public class Client {
     }
 
     /// Resolve a URLSession dataTask to a `Response`.
-    public func resolveResponse<T: Request>(for payload: RequestPayload<T>, data: Data?, response: URLResponse?) throws -> T.Response? {
+    public func resolveResponse<T: Request>(for payload: RequestPayload<T>, data: Data?, response: URLResponse?) throws -> (T.Response?, ResponseError?) {
         guard let response = response else {
             throw Error.networkError(message: "No response from server", error: nil)
         }
@@ -238,7 +238,7 @@ public class Client {
             throw Error.networkError(message: "Request id mismatch", error: nil)
         }
         print("response payload result:\(responsePayload.result)")
-        return responsePayload.result
+        return (responsePayload.result, responsePayload.error)
     }
 
     /// Send a JSON-RPC 2.0 request.
@@ -257,8 +257,9 @@ public class Client {
                 return completionHandler(nil, Error.networkError(message: "Unable to send request", error: error))
             }
             let rv: T.Response?
+            let err : ResponseError?
             do {
-                rv = try self.resolveResponse(for: payload, data: data, response: response)
+                (rv, err) = try self.resolveResponse(for: payload, data: data, response: response)
             } catch {
                 return completionHandler(nil, error)
             }
@@ -268,7 +269,7 @@ public class Client {
 
     /// Blocking `.send(..)`.
     /// - Warning: This should never be called from the main thread.
-    public func sendSynchronous<T: Request>(_ request: T) throws -> T.Response! {
+    public func sendSynchronous<T: Request>(_ request: T) throws -> (T.Response!, Swift.Error?) {
         let semaphore = DispatchSemaphore(value: 0)
         var result: T.Response?
         var error: Swift.Error?
@@ -281,7 +282,7 @@ public class Client {
         if let error = error {
             throw error
         }
-        return result
+        return (result, error)
     }
 }
 

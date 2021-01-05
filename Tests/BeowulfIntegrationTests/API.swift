@@ -185,10 +185,12 @@ class ClientTest: XCTestCase {
         SetKeys(keys: keys)
 //        var trx = CreateMultiSigAccount(client: client, creator: "beowulf", newAccountName: "acc123", fee: "0.10000 W", accounts: ["thaiw1"], keys: [wallet!.publicKey], threshold: 1, chain: .testNet)
         
-        var trx = Transfer(client: client, from: "thaiw1", to: "acc123", amount: "0.01000 W", fee: "0.01000 W", memo: "", chain: .testNet)
-        trx = Transfer(client: client, from: "acc123", to: "thaiw1", amount: "10.00000 THAITEST", fee: "0.01000 W", memo: "", chain: .testNet)
+        var trx = Transfer(client: client, from: "acc123", to: "acc123", amount: "1.01000 BWF", fee: "0.01000 W", memo: "", chain: .testNet)
+//        trx = Transfer(client: client, from: "acc123", to: "thaiw1", amount: "10.00000 THAITEST", fee: "0.01000 W", memo: "", chain: .testNet)
 //        trx = Transfer(client: client, from: "beowulf", to: "thaiw1", amount: "100.00000 W", fee: "0.01000 W", memo: "", chain: .testNet)
         
+//        let check = CheckAuthority(client: client, account: "acc123", subAcc: "thaiw2")
+//        print(check)
         let trans = GetTransaction(client: client, trxId: "d1740273eef7790f345c70d109709072f050d818")
         print (trans)
     }
