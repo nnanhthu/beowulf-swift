@@ -99,13 +99,13 @@ public struct Operation {
     public struct AccountUpdate: OperationType, Equatable {
         public var account: String
         public var owner: Authority?
-        public var fee: String
+        public var fee: Asset
         public var jsonMetadata: String
 
         public init(
             account: String,
             owner: Authority?,
-            fee: String,
+            fee: Asset,
             jsonMetadata: String = ""
         ) {
             self.account = account

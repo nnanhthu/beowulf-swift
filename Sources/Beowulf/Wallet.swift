@@ -268,13 +268,13 @@ func encryptKeys(){
         
 }
 
-public func CreatePrivateKey(user: String, role: String, password: String) -> PrivateKey?{
+func CreatePrivateKey(user: String, role: String, password: String) -> PrivateKey?{
     let new_password = password + Wallet_!.salt
     let seed = user + role + new_password
     return PrivateKey(seed: seed)
 }
 
-public func CreatePublicKey(privateKey: PrivateKey) -> PublicKey{
+func CreatePublicKey(privateKey: PrivateKey) -> PublicKey{
     return privateKey.createPublic()
 }
 
@@ -506,6 +506,13 @@ public func SetKeysFromFileWallet(pathFileWallet: String, password: String) -> S
     catch {/* error handling here */return "error"}
     }
     return "error"
+}
+
+public func GetPublicKey(privateKey: String) -> String{
+    let wif = PrivateKey(privateKey)!
+    let publicKey = CreatePublicKey(privateKey: wif)
+    let pubKey = publicKey.address
+    return pubKey
 }
 
 public extension Data {

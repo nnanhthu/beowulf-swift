@@ -245,30 +245,28 @@ public func CreateMultiSigAccount(client: Beowulf.Client, creator: String, newAc
     return sendTrx(client: client, op: accountCreate, chain: chain)
 }
 
-//public func AccountUpdate(client: Beowulf.Client, accountName: String, publicKey: String, fee: String, chain: ChainId) -> API.TransactionConfirmation? {
+//public func AccountUpdate(client: Beowulf.Client, accountName: String, publicKey: String, fee: String, chain: ChainId) -> (API.TransactionConfirmation?, ResponseError?) {
 //
 //    var err = ValidateNameAccount(account: accountName)
 //    if err != nil{
-//        return nil
+//        return (nil, ResponseError.init(code: Er.invalidAccountName.rawValue, message: err!, data: nil))
 //    }else{
 //        let validate = ValidateFee(fee: fee, minFee: 1000)
 //        if validate == false{
-//            return nil
+//            return (nil, ResponseError.init(code: Er.invalidFee.rawValue, message: "Invalid Fee", data: nil))
 //        }
 //        let pub = PublicKey(publicKey)!
 //        let keyAuth = Authority.Auth(pub, weight: 1)
 //        var keyAuths : [Authority.Auth<PublicKey>] = []
 //        keyAuths.append(keyAuth)
 //        let owner = Authority(weightThreshold: 1, accountAuths: [], keyAuths: keyAuths)
-//        let accountCreate = Operation.AccountCreate(
-//            fee: Asset(fee)!,
-//            creator: creator,
-//            newAccountName: newAccountName,
+//        let accountUpdate = Operation.AccountUpdate(
+//            account: accountName,
 //            owner: owner,
-//            jsonMetadata:""
-//        )
+//            fee: Asset(fee)!,
+//            jsonMetadata: "")
 //
-//        return sendTrx(client: client, op: accountCreate, chain: chain)
+//        return sendTrx(client: client, op: accountUpdate, chain: chain)
 //    }
 //}
 
